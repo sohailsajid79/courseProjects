@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AJAX/ PHP/ CURL/ JSON</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="libs/css/style.css" />
+  </head>
+
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>API Name</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td class="apiName">1. Wikipedia Search</td>
+          <td class="description">
+            Returns the Wikipedia entry for the search term; select city
+            <select id="selCity">
+              <option value="London">London</option>
+              <option value="Dubai">Dubai</option>
+              <option value="Tokyo">Tokyo</option>
+            </select>
+          </td>
+          <td id="btnWiki">
+            <button>Submit</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="apiName">2. Timezone</td>
+          <td class="description">Returns Austrian Timezone Data</td>
+          <td id="tmzBtn">
+            <button>Submit</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="apiName">3. Weather</td>
+          <td class="description">
+            Returns the weather station and observation for the ICAO codes
+          </td>
+          <td id="wxBtn">
+            <button>Submit</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td id="results">Results:</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="”preloader”"></div>
+
+    <script
+      type="application/javascript"
+      src="libs/js/jquery-2.2.3.min.js"
+    ></script>
+    <script type="application/javascript" src="libs/js/script.js"></script>
+  </body>
+</html>
