@@ -26,37 +26,67 @@ $("#btnWiki").click(function () {
 
 // GET Timezone:
 $("#tmzBtn").click(function () {
-  $.ajax({
-    url: "libs/php/timezone.php",
-    type: "GET",
-    dataType: "json",
+  const countryCode = $("#selCountry").val();
+  let lat, lng;
 
-    success: function (result) {
-      console.log(JSON.stringify(result));
-      // .html("") will clear the existing result
-      $("#results").html("");
+  if (countryCode === "Austria") {
+    lat = "47.01";
+    lng = "10.2";
+  } else if (countryCode === "Italy") {
+    lat = "46";
+    lng = "10";
+  } else if (countryCode === "SaudiArabia") {
+    lat = "23";
+    lng = "46";
+  }
 
-      if (typeof result === "string") {
-        result = JSON.parse(result);
-      }
+  if (lat && lng) {
+    $.ajax({
+      url: "libs/php/timezone.php",
+      type: "GET",
+      dataType: "json",
+      data: { lat: lat, lng: lng },
 
-      $("#results").append("Timezone: " + result.timezoneId + "<br/>");
-      $("#results").append("GMT offset: " + result.gmtOffset + "<br/>");
-      $("#results").append("Current Time: " + result.time + "<br/>");
-      $("#results").append("Longitude: " + result.lng + "<br/>");
-      $("#results").append("Latitude: " + result.lat + "<br/>");
-      $("#results").append("Sunrise: " + result.sunrise + "<br/>");
-      $("#results").append("Sunset: " + result.sunset + "<br/>");
-    },
-  });
+      success: function (result) {
+        console.log(JSON.stringify(result));
+        // .html("") will clear the existing result
+        $("#results").html("");
+
+        if (typeof result === "string") {
+          result = JSON.parse(result);
+        }
+
+        $("#results").append("Timezone: " + result.timezoneId + "<br/>");
+        $("#results").append("GMT offset: " + result.gmtOffset + "<br/>");
+        $("#results").append("Current Time: " + result.time + "<br/>");
+        $("#results").append("Longitude: " + result.lng + "<br/>");
+        $("#results").append("Latitude: " + result.lat + "<br/>");
+        $("#results").append("Sunrise: " + result.sunrise + "<br/>");
+        $("#results").append("Sunset: " + result.sunset + "<br/>");
+      },
+    });
+  } else {
+    console.log("Latitude and longitude values are not set");
+  }
 });
 
 //GET Weather & Observation:
 $("#wxBtn").click(function () {
+  let north = $("#North").val();
+  let south = $("#South").val();
+  let east = $("#East").val();
+  let west = $("#West").val();
+
   $.ajax({
     url: "libs/php/weather.php",
     type: "GET",
     dataType: "json",
+    data: {
+      north: north,
+      south: south,
+      east: east,
+      west: west,
+    },
 
     success: function (result) {
       console.log(JSON.stringify(result));

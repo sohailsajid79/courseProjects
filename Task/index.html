@@ -36,8 +36,13 @@
 
         <tr>
           <td class="apiName">2. Timezone</td>
-          <td class="description">Returns Austrian Timezone Data</td>
+          <td class="description">Returns Timezone Data</td>
           <td id="tmzBtn">
+            <select id="selCountry">
+              <option value="Austria">Austria</option>
+              <option value="Italy">Italy</option>
+              <option value="SaudiArabia">Saudi Arabia</option>
+            </select>
             <button>Submit</button>
           </td>
         </tr>
@@ -45,8 +50,18 @@
         <tr>
           <td class="apiName">3. Weather</td>
           <td class="description">
-            Returns the weather station and observation for the ICAO codes
+            Returns the weather station and observation for the ICAO codes;
+            insert coordinates
           </td>
+          <td>
+            <form action="/action_page.php">
+              <input type="text" id="North" name="North" placeholder="North" />
+              <input type="text" id="South" name="South" placeholder="South" />
+              <input type="text" id="East" name="East" placeholder="East" />
+              <input type="text" id="West" name="West" placeholder="West" />
+            </form>
+          </td>
+
           <td id="wxBtn">
             <button>Submit</button>
           </td>

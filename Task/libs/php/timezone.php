@@ -4,8 +4,11 @@ error_reporting(E_ALL);
 
 $executionStartTime = microtime(true);
 
+$lat = $_GET['lat'];
+$lng = $_GET['lng'];
+
 // timezone API 
-$url = 'http://api.geonames.org/timezoneJSON?formatted=true&lat=47.01&lng=10.2&username=sajid79&style=full';
+$url = "http://api.geonames.org/timezoneJSON?formatted=true&lat=$lat&lng=$lng&username=sajid79&style=full";
 
 // Initialize Curl 
 $ch = curl_init();

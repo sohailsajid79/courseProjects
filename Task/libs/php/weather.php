@@ -4,8 +4,13 @@ error_reporting(E_ALL);
 
 $executionStartTime = microtime(true);
 
+$north = $_GET['north'];
+$south = $_GET['south'];
+$east = $_GET['east'];
+$west = $_GET['west'];
+
 // weather API 
-$url = 'http://api.geonames.org/weatherJSON?formatted=true&north=44.1&south=-9.9&east=-22.4&west=55.2&username=sajid79&style=full';
+$url = 'http://api.geonames.org/weatherJSON?formatted=true&north=' . $north . '&south=' . $south . '&east=' . $east . '&west=' . $west . '&username=sajid79&style=full';
 
 // Initialize Curl 
 $ch = curl_init();
@@ -18,8 +23,8 @@ curl_close($ch);
 	
 $decode = json_decode($result, true);
 	
-	header('Content-Type: application/json; charset=UTF-8');
+header('Content-Type: application/json; charset=UTF-8');
 
-    echo json_encode($decode);
+echo json_encode($decode);
 
 
