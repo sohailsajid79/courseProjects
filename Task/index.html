@@ -36,13 +36,25 @@
 
         <tr>
           <td class="apiName">2. Timezone</td>
-          <td class="description">Returns Timezone Data</td>
+          <td class="description">
+            Returns Timezone Data for Latitude and Longitude Coordinates
+          </td>
           <td id="tmzBtn">
-            <select id="selCountry">
-              <option value="Austria">Austria</option>
-              <option value="Italy">Italy</option>
-              <option value="SaudiArabia">Saudi Arabia</option>
-            </select>
+            <input
+              id="Latitude"
+              type="number"
+              placeholder="Lat"
+              name="Latitude"
+              style="width: 150px"
+            />
+
+            <input
+              id="Longitude"
+              type="number"
+              placeholder="Long"
+              name="Longitude"
+              style="width: 150px"
+            />
             <button>Submit</button>
           </td>
         </tr>

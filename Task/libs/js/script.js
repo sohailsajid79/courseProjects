@@ -26,19 +26,8 @@ $("#btnWiki").click(function () {
 
 // GET Timezone:
 $("#tmzBtn").click(function () {
-  const countryCode = $("#selCountry").val();
-  let lat, lng;
-
-  if (countryCode === "Austria") {
-    lat = "47.01";
-    lng = "10.2";
-  } else if (countryCode === "Italy") {
-    lat = "46";
-    lng = "10";
-  } else if (countryCode === "SaudiArabia") {
-    lat = "23";
-    lng = "46";
-  }
+  let lat = $("#Latitude").val();
+  let lng = $("#Longitude").val();
 
   if (lat && lng) {
     $.ajax({
