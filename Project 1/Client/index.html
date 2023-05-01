@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Global Gazette</title>
+
+    <!-- Supporting Stylesheets -->
+    <link rel="stylesheet" href="./src/index.css" />
+
+    <!-- Plugins -->
+    <!-- Map Center Coordinates -->
+    <link rel="stylesheet" href="./dist/L.Control.MapCenterCoord.min.css" />
+    <link rel="stylesheet" href="./src/L.Control.MapCenterCoord.css" />
+
+    <!-- Globe Minimap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+
+    <!-- Compass -->
+    <link rel="stylesheet" href="./dist/leaflet-compass.min.css" />
+    <link rel="stylesheet" href="./src/leaflet-compass.src.css" />
+
+    <!-- Tracking GPS Position -->
+    <link
+      href="
+    https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css
+    "
+      rel="stylesheet"
+    />
+    <!-- Rotating Globe -->
+    <link rel="stylesheet" href="./dist/style.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+  </head>
+
+  <body>
+    <div id="worldmap"></div>
+    <form class="search-country-container">
+      <select id="selectCountry">
+        <option value="">Select Country</option>
+      </select>
+    </form>
+
+    <!-- jQuery CDN -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+      integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <!-- Leaflet JS CDN -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""
+    ></script>
+
+    <!-- Leaflet.MapCenterCoord -->
+    <script src="./dist/L.Control.MapCenterCoord.min.js"></script>
+    <script src="./src/L.Control.MapCenterCoord.js"></script>
+
+    <!-- Globe Minimap -->
+    <script src="./dist/Control.GlobeMiniMap.min.js"></script>
+    <script src="./src/Control.GlobeMiniMap.js"></script>
+
+    <!-- Compass -->
+    <script src="./dist/leaflet-compass.min.js"></script>
+    <script src="./src/leaflet-compass.src.js"></script>
+
+    <!-- Tracking GPS Position -->
+    <script src="
+    https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js
+    "></script>
+    <!-- Rotating Globe -->
+    <script src="./dist/script.js"></script>
+
+    <!-- Supporting JS files -->
+    <script src="./src/app.js"></script>
+    <script src="./src/countryBordersGeoJson.js"></script>
+  </body>
+</html>

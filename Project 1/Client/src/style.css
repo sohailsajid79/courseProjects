@@ -1,0 +1,32 @@
+body {
+  background: linear-gradient(
+    -45deg,
+    #051937,
+    #004d7a,
+    #008793,
+    #00bf72,
+    #a8eb12
+  );
+  background-size: 400% 400%;
+  animation: gradient 6s ease infinite;
+  height: 100vh;
+  
+  text-align:center;
+  margin-top:20px;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+#worldmap {margin:0 auto;}
+#worldmap svg {background:rgba(50,167,224,0.4);border-radius: 200px;box-shadow:0 0 10px rgba(157, 219, 255);}
+.land {fill: rgba(170, 209, 172);}
+#globesarecool {color:#fff;}
