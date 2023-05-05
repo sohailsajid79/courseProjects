@@ -10,9 +10,9 @@ body {
   background-size: 400% 400%;
   animation: gradient 6s ease infinite;
   height: 100vh;
-  
-  text-align:center;
-  margin-top:20px;
+
+  text-align: center;
+  margin-top: 20px;
 }
 @keyframes gradient {
   0% {
@@ -26,7 +26,79 @@ body {
   }
 }
 
-#worldmap {margin:0 auto;}
-#worldmap svg {background:rgba(50,167,224,0.4);border-radius: 200px;box-shadow:0 0 10px rgba(157, 219, 255);}
-.land {fill: rgba(170, 209, 172);}
-#globesarecool {color:#fff;}
+#worldmap {
+  margin: 0 auto;
+}
+#worldmap svg {
+  background: rgba(50, 167, 224, 0.4);
+  /* border-radius: 200px; */
+  /* box-shadow: 0 0 10px rgba(157, 219, 255); */
+}
+.land {
+  fill: rgba(170, 209, 172);
+}
+#globesarecool {
+  color: #fff;
+}
+
+.leaflet-control .loader {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.country-icon {
+  height: 27px;
+  width: 27px;
+  border-radius: 7px;
+  margin-right: 7px;
+}
+.leaflet-countryselect-container {
+  position: absolute;
+  right: 529px;
+  top: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .leaflet-countryselect-container {
+    right: 250px;
+  }
+}
+@media only screen and (max-width: 534px) {
+  .leaflet-countryselect-container {
+    right: 100px;
+  }
+}
+@media only screen and (max-width: 425px) {
+  .leaflet-countryselect-container {
+    right: 100px;
+  }
+}
+@media only screen and (max-width: 425px) {
+  .leaflet-countryselect-container {
+    right: 47px;
+  }
+}
+
+.bootstrap-select .dropdown-menu {
+  overflow: scroll;
+}
+#weatherModal,
+#holidaysModal,
+#economicsModal,
+#countryInfoModal {
+  display: none;
+}
+.leaflet-countryselect-container {
+  display: none;
+}
+.country-search {
+  position: absolute;
+  z-index: 9999999999999;
+  display: none;
+  width: 100%;
+  text-align: center;
+  margin-top: 12px;
+}
