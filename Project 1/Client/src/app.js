@@ -1,7 +1,7 @@
 $(document).ready(function () {
-  const mapInitiate = () => {
+  const mapInitiate = (lat, lng) => {
     // Map
-    const map = L.map("map1").setView([51.505, -0.09], 3);
+    const map = L.map("map1").setView([lat, lng], 3);
 
     // Initialization
     const initialization = L.tileLayer(
@@ -65,7 +65,7 @@ $(document).ready(function () {
 
     L.control.layers(baseMaps).addTo(map);
 
-    // geo JSON data & setting icon
+    // geo JSON data & setting icon clusters
     const markers = L.markerClusterGroup();
     const bankIcon = L.icon({
       iconUrl: "./src/icons/bank.png",
@@ -81,7 +81,110 @@ $(document).ready(function () {
       },
     });
 
-    // Zoom back to default position
+    //get CountryInfo
+    $(document).on("change", "#country-select-box", function (event) {
+      let country_name = $("#country-select-box").val();
+      if (country_name == "") {
+        alert("Please select the country");
+      } else {
+        let country_code = country_icons[country_name];
+        let data = {
+          country_code: country_code,
+        };
+        let settings = {
+          dataType: "json",
+          url: "../Server/getCountryInfo.php",
+          method: "GET",
+          data: data,
+        };
+        $.ajax(settings).done(function (result) {
+          console.log(result); // Log the callback response to the console
+          if (result.status == "success") {
+            let countryInfo = result.data;
+            $("#timezone").text(countryInfo.timezone);
+            $("#gmtOffset").text(countryInfo.gmtOffset);
+            $("#currentTime").text(countryInfo.currentTime);
+            $("#longitude").text(countryInfo.longitude);
+            $("#latitude").text(countryInfo.latitude);
+            $("#sunrise").text(countryInfo.sunrise);
+            $("#sunset").text(countryInfo.sunset);
+          } else {
+            alert("Failed to fetch country information.");
+          }
+        });
+      }
+    });
+
+    // get Economic
+
+    // get Country Holidays
+    $(document).on("change", "#country-select-box", function (event) {
+      $("#addHolidays").html("");
+      let country_name = $("#country-select-box").val();
+      if (country_name == "") {
+        alert("please select the country");
+      }
+      let country_code = country_icons[country_name];
+      let data = {
+        url: "https://calendarific.com/api/v2/holidays",
+        country_code: country_code,
+        data_type: "holiday",
+      };
+      let settings = {
+        dataType: "json",
+        url: "../Server/getCountryHolidays.php",
+        method: "POST",
+        data: data,
+      };
+      let table = "";
+      $.ajax(settings).done(function (result) {
+        if (result.meta.code == 200) {
+          $.each(result.response.holidays, function (ket, item) {
+            day = item.date.datetime.day;
+            month = item.date.datetime.month;
+            new_date = moment(month + " " + day).format("Do MMMM");
+            table = `<tr>
+                          <td><i class="fas fa-calendar-alt"></i></td>
+                          <td>${item.name}</td>
+                          <td>${new_date}</td>
+                      `;
+            $("#addHolidays").append(table);
+          });
+        } else {
+        }
+      });
+    });
+
+    // get Weather
+    $(document).on("change", "#country-select-box", function (event) {
+      let country_name = $("#country-select-box").val();
+      if (country_name == "") {
+        alert("Please select the country");
+      } else {
+        let country_code = country_icons[country_name];
+        let data = {
+          country_code: country_code,
+          country_name: country_name,
+        };
+        let settings = {
+          dataType: "json",
+          url: "../Server/getWeather.php",
+          method: "GET",
+          dataType: "json",
+          data: data,
+        };
+        $.ajax(settings).done(function (result) {
+          let theDate = new Date(result.data.dt * 1000);
+          let dateString = theDate.toGMTString();
+          let converted = result.data.main.feels_like - 273.15;
+          $("#date_time").text(dateString);
+          $("#mood").text(Math.round(converted) + "℃");
+          $("#humidity").text(result.data.main.humidity + "%");
+          $("#visibility").text(result.data.visibility / 1000 + " KM");
+          $("#wind_speed").text(result.data.wind.speed + " meter/sec");
+        });
+      }
+    });
 
     // Marker Cluster
     markers.addLayer(marker);
@@ -154,15 +257,17 @@ $(document).ready(function () {
       position: "topleft",
       flyTo: true,
       strings: {
-        title: "My Location",
+        title: "Your Location",
       },
     };
 
-    // Get location
+    // get Location Modal
     const locationControl = L.control.locate(options).addTo(map);
 
+    //L.geoJSON(countryBorders).addTo(map);
+
     // Select from search dropdown list
-    addCountrySearch(map); // adds the country search box for polygions
+    addCountrySearch(map); // adds the country search box for polygons
     $("select.leaflet-countryselect").attr("data-live-search", "true");
     $("select.leaflet-countryselect").selectpicker();
 
@@ -211,6 +316,8 @@ $(document).ready(function () {
         $(this).replaceWith('<div id="map1"></div>');
         $("#menu-navbar").css("display", "inline-flex");
         mapInitiate(lat, lng);
+        let country_code = geoplugin_countryCode();
+        showCountryOnLoad(country_code);
       });
     }, 3000);
   }
@@ -218,6 +325,16 @@ $(document).ready(function () {
     navigator.geolocation.getCurrentPosition(coord);
   }
 
+  function showCountryOnLoad(country_code) {
+    //30-2023
+    $.each(country_icons, function (key, item) {
+      //country_icons is from Leafet.CountrySelect.js file to get the country code
+      if (country_code.toLowerCase() == item.toLowerCase()) {
+        // match incoming country code in country_code array to get the country name
+        $("#country-select-box").selectpicker("val", key).change(); // assign and change the country dropdown automatically according to selected country
+      }
+    });
+  }
   $(document).on("change", "#country-select-box", function () {
     let country = $(this).val();
     let polygons = countries[country];

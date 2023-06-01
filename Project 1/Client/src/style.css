@@ -90,6 +90,7 @@ body {
 #economicsModal,
 #countryInfoModal {
   display: none;
+  top: 26px;
 }
 .leaflet-countryselect-container {
   display: none;
@@ -101,4 +102,8 @@ body {
   width: 100%;
   text-align: center;
   margin-top: 12px;
+}
+
+.leaflet-top {
+  top: 26px;
 }

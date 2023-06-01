@@ -45,6 +45,12 @@
     <!-- Globe Minimap CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    <!-- 30-2023 -->
+    <script
+      language="JavaScript"
+      src="http://www.geoplugin.net/javascript.gp"
+      type="text/javascript"
+    ></script>
 
     <!-- Marker Clustering CSS -->
     <link rel="stylesheet" href="./dist/MarkerCluster.css" />
@@ -94,44 +100,35 @@
             <table class="table">
               <tbody>
                 <tr>
-                  <td>Population</td>
-                  <td class="tableText" id="population"></td>
+                  <td>Timezone</td>
+                  <td class="tableText" id="timezone"></td>
                 </tr>
                 <tr>
-                  <td>Net Migration</td>
-                  <td class="tableText" id="migration"></td>
+                  <td>GMT offset</td>
+                  <td class="tableText" id="gmtOffset"></td>
                 </tr>
                 <tr>
-                  <td>Capital</td>
-                  <td class="tableText" id="capital"></td>
+                  <td>Current Time</td>
+                  <td class="tableText" id="currentTime"></td>
                 </tr>
                 <tr>
-                  <td>Time Zone</td>
-                  <td class="tableText" id="time"></td>
+                  <td>Longitude</td>
+                  <td class="tableText" id="longitude"></td>
                 </tr>
                 <tr>
-                  <td>Trade</td>
-                  <td class="tableText" id="trade"></td>
+                  <td>Latitude</td>
+                  <td class="tableText" id="latitude"></td>
                 </tr>
                 <tr>
-                  <td>Central Bank</td>
-                  <td class="tableText" id="bank"></td>
+                  <td>Sunrise</td>
+                  <td class="tableText" id="sunrise"></td>
+                </tr>
+                <tr>
+                  <td>Sunset</td>
+                  <td class="tableText" id="sunset"></td>
                 </tr>
               </tbody>
             </table>
-            <div id="countryFlag">
-              <div id="COA"></div>
-              <div id="flag"></div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>
@@ -180,23 +177,14 @@
                   <td class="tableText" id="Debt"></td>
                 </tr>
                 <tr>
-                  <td>Prosperity Index</td>
-                  <td class="tableText" id="prosperity"></td>
+                  <td>Trade</td>
+                  <td class="tableText" id="trade"></td>
                 </tr>
               </tbody>
             </table>
             <div id="resources">
               <div id="tradeEconomics"></div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>
@@ -218,18 +206,9 @@
             </h2>
           </div>
           <div class="modal-body">
-            <table class="table">
+            <table class="table table-striped table-hover">
               <tbody id="addHolidays"></tbody>
             </table>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>
@@ -252,12 +231,8 @@
             <table class="table">
               <tbody>
                 <tr>
-                  <td>Capital</td>
-                  <td class="tableText" id="capital"></td>
-                </tr>
-                <tr>
                   <td>Today</td>
-                  <td class="tableText" id="date&Time"></td>
+                  <td class="tableText" id="date_time"></td>
                 </tr>
                 <tr>
                   <td>Feels like</td>
@@ -272,20 +247,11 @@
                   <td class="tableText" id="visibility"></td>
                 </tr>
                 <tr>
-                  <td>Forecast 4 days</td>
-                  <td class="tableText" id="forecast"></td>
+                  <td>Wind Speed</td>
+                  <td class="tableText" id="wind_speed"></td>
                 </tr>
               </tbody>
             </table>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
           </div>
         </div>
       </div>
@@ -341,6 +307,7 @@
 
     <!-- Supporting JS files -->
     <script src="./src/Leaflet.CountrySelect.js"></script>
+    <script src="./src/moment.js"></script>
     <script src="./src/app.js"></script>
     <script src="./src/centralBanksGeoJSON.js"></script>
   </body>

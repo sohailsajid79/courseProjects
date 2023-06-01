@@ -1,5 +1,5 @@
 L.CountrySelect = {};
-var countries = {
+let countries = {
   Afghanistan: {
     type: "Feature",
     id: "AFG",
