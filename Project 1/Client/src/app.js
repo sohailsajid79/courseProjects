@@ -81,42 +81,6 @@ $(document).ready(function () {
       },
     });
 
-    //get CountryInfo
-    $(document).on("change", "#country-select-box", function (event) {
-      let country_name = $("#country-select-box").val();
-      if (country_name == "") {
-        alert("Please select the country");
-      } else {
-        let country_code = country_icons[country_name];
-        let data = {
-          country_code: country_code,
-        };
-        let settings = {
-          dataType: "json",
-          url: "../Server/getCountryInfo.php",
-          method: "GET",
-          data: data,
-        };
-        $.ajax(settings).done(function (result) {
-          console.log(result); // Log the callback response to the console
-          if (result.status == "success") {
-            let countryInfo = result.data;
-            $("#timezone").text(countryInfo.timezone);
-            $("#gmtOffset").text(countryInfo.gmtOffset);
-            $("#currentTime").text(countryInfo.currentTime);
-            $("#longitude").text(countryInfo.longitude);
-            $("#latitude").text(countryInfo.latitude);
-            $("#sunrise").text(countryInfo.sunrise);
-            $("#sunset").text(countryInfo.sunset);
-          } else {
-            alert("Failed to fetch country information.");
-          }
-        });
-      }
-    });
-
-    // get Economic
-
     // get Country Holidays
     $(document).on("change", "#country-select-box", function (event) {
       $("#addHolidays").html("");
@@ -186,6 +150,103 @@ $(document).ready(function () {
       }
     });
 
+    // get Tweets
+    $(document).on("change", "#country-select-box", function (event) {
+      let country_name = $("#country-select-box").val();
+      if (country_name == "") {
+        alert("Please select the country");
+      } else {
+        let country_code = country_icons[country_name];
+        let data = {
+          country_code: country_code,
+          country_name: country_name,
+        };
+        let settings = {
+          dataType: "json",
+          url: "../Server/getTweets.php",
+          method: "GET",
+          dataType: "json",
+          data: data,
+        };
+        function fetchAndRenderTweets() {
+          $.ajax(settings).done(function (result) {
+            let tweets = result.globalObjects.tweets;
+
+            // Reverse the order of tweets
+            let reversedTweets = Object.values(tweets).reverse();
+
+            let tbody = "";
+            $.each(reversedTweets, function (key, item) {
+              let theDate = new Date(item.created_at);
+              let dateString = theDate.toGMTString();
+              tbody += `<tr>
+                <td>${dateString}</td>
+                <td>${item.user_id}</td>
+                <td>${item.full_text}</td>
+                <td><a href='${
+                  item.entities.media != undefined
+                    ? item.entities.media[0].expanded_url
+                    : ""
+                }' target="_blank">Link</a></td>
+              </tr>`;
+            });
+            $("#addTweets").html(tbody);
+          });
+        }
+
+        // Initial fetch and render
+        fetchAndRenderTweets();
+
+        // Periodically fetch and render tweets every 24 hours
+        setInterval(fetchAndRenderTweets, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
+      }
+    });
+
+    //get CountryInfo
+    $(document).on("change", "#country-select-box", function (event) {
+      let country_name = $("#country-select-box").val();
+      if (country_name == "") {
+        alert("Please select the country");
+      } else {
+        let country_code = country_icons[country_name];
+        let data = {
+          country_code: country_code,
+          country_name: country_name,
+        };
+        let settings = {
+          dataType: "json",
+          url: "../Server/getCountryInfo.php",
+          method: "GET",
+          data: {
+            country_code: country_code,
+            country_name: country_name,
+          },
+        };
+
+        $.ajax(settings)
+          .done(function (result) {
+            if (result.status === "success") {
+              let countryInfo = result.data;
+              $("#timezone").text(countryInfo.timezoneId);
+              $("#gmtOffset").text(countryInfo.gmtOffset);
+              $("#currentTime").text(countryInfo.currentTime);
+              $("#longitude").text(countryInfo.longitude);
+              $("#latitude").text(countryInfo.latitude);
+              $("#sunrise").text(countryInfo.sunrise);
+              $("#sunset").text(countryInfo.sunset);
+              //$("#countryInfoModal").modal("show"); // Show the country info modal
+            } else {
+              console.error("Failed to fetch country information.");
+            }
+          })
+          .fail(function (xhr) {
+            console.log("Error calling Genomes API:");
+            console.log("XHR status:", xhr.status);
+            console.log("XHR response:", xhr.responseJSON);
+          });
+      }
+    });
+
     // Marker Cluster
     markers.addLayer(marker);
     map.addLayer(markers);
@@ -200,11 +261,11 @@ $(document).ready(function () {
     ).addTo(map);
 
     L.easyButton(
-      '<i class="fa fa-money" aria-hidden="true" style="color: #AAD1AC"></i>',
+      '<i class="fa fa-twitter" aria-hidden="true" style="color: #1DA1F2"></i>',
       function () {
-        $("#economicsModal").modal("show");
+        $("#tweetModal").modal("show");
       },
-      "Show economics"
+      "Show Tweet"
     ).addTo(map);
 
     L.easyButton(
@@ -326,12 +387,10 @@ $(document).ready(function () {
   }
 
   function showCountryOnLoad(country_code) {
-    //30-2023
     $.each(country_icons, function (key, item) {
       //country_icons is from Leafet.CountrySelect.js file to get the country code
       if (country_code.toLowerCase() == item.toLowerCase()) {
-        // match incoming country code in country_code array to get the country name
-        $("#country-select-box").selectpicker("val", key).change(); // assign and change the country dropdown automatically according to selected country
+        $("#country-select-box").selectpicker("val", key).change();
       }
     });
   }

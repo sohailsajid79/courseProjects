@@ -1,38 +1,33 @@
 <?php
+require('config.php');
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 $country_code = strtolower($_GET['country_code']);
-$country_name = $_GET['country_name']; 
-$api_key = '498e4b11ada640dca187615cac3a761b'; 
+$country_name = $_GET['country_name'];
 
-//get Coordinates
-$url = 'https://api.opencagedata.com/geocode/v1/json?q=' . urlencode($country_name) . '&key=' . $api_key . "&countrycode=" . $country_code;
-$url .= "&pretty=1";
-$url .= "&no_dedupe=1";
-$url .= "&limit=1";
-$coordinates = curlCoordinatesRequest($url, 'GET');
+// get Coordinates
+$url = 'https://api.opencagedata.com/geocode/v1/json?q='.urlencode($country_name).'&key=' 
+. $COUNTRY_COORDINATES_API_KEY."&countrycode=".$country_code;
+$url .= "&pretty=1"; 
+$url .= "&no_dedupe=1";  
+$url .= "&limit=1";  
+$coordinates = curlCoordinatesRequest($url,'GET');
 
-// Get timezone information using GeoNames API
-$username = 'sajid79'; // username
-$url = "http://api.geonames.org/timezoneJSON?formatted=true&lat=" . $coordinates['lat'] . "&lng=" . $coordinates['lng'] . "&username=$username&style=full";
-$timezone_info = curlRequest($url, 'GET');
-
-echo "Timezone Info: ";
-print_r($timezone_info);
-
+// Call timezone_GeoName API
+$timezone_info = getTimezoneInfo($coordinates['lat'], $coordinates['lng']);
 if (!$timezone_info->status) {
     $response = array(
         "status" => "error",
         "message" => $timezone_info->message
     );
 } else {
-    $timezone = $timezone_info->data['timezoneId'];
-    $gmtOffset = $timezone_info->data['gmtOffset'];
-    $currentTime = $timezone_info->data['time'];
-    $longitude = $timezone_info->data['lng'];
-    $latitude = $timezone_info->data['lat'];
-    $sunrise = $timezone_info->data['sunrise'];
-    $sunset = $timezone_info->data['sunset'];
+    $timezone = $timezone_info->data->timezoneId;
+    $gmtOffset = $timezone_info->data->gmtOffset;
+    $currentTime = $timezone_info->data->time;
+    $longitude = $timezone_info->data->lng;
+    $latitude = $timezone_info->data->lat;
+    $sunrise = $timezone_info->data->sunrise;
+    $sunset = $timezone_info->data->sunset;
 
     // Prepare response data
     $response = array(
@@ -47,18 +42,15 @@ if (!$timezone_info->status) {
             "sunset" => $sunset
         )
     );
-}
 
-// Log the result
-error_log(json_encode($response));
+    // Log the result
+    error_log(json_encode($response));
+}
 
 header('Content-Type: application/json; charset=UTF-8');
 echo json_encode($response);
 
-function curlCoordinatesRequest($url, $method = "GET", $params = [])
-{
-    $coordinates_lat_lng['lat'] = null;
-    $coordinates_lat_lng['lng'] = null;
+function curlCoordinatesRequest($url, $method = "GET", $params = []) {
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => $url,
@@ -71,19 +63,29 @@ function curlCoordinatesRequest($url, $method = "GET", $params = [])
         CURLOPT_CUSTOMREQUEST => $method,
     ));
     $response = curl_exec($curl);
-    $response_data = curl_errno($curl) ? [] : json_decode($response);
-    if (!curl_errno($curl)) {
-        $coordinates = isset($response_data->results[0]->geometry) ? $response_data->results[0]->geometry : [];
-        $coordinates_lat_lng['lat'] = isset($coordinates->lat) ? $coordinates->lat : null;
-        $coordinates_lat_lng['lng'] = isset($coordinates->lng) ? $coordinates->lng : null;
-        return $coordinates_lat_lng;
-    }
-    curl_close($curl);
+    $response_data = curl_errno($curl) ? [] : json_decode($response, true);
+if (!curl_errno($curl) && isset($response_data['results'][0]['geometry'])) {
+    $coordinates_lat_lng['lat'] = $response_data['results'][0]['geometry']['lat'];
+    $coordinates_lat_lng['lng'] = $response_data['results'][0]['geometry']['lng'];
     return $coordinates_lat_lng;
 }
 
-function curlRequest($url, $method = "GET", $params = [])
-{
+    curl_close($curl);
+    return [];
+}
+
+function getTimezoneInfo($latitude, $longitude) {
+    global $COUNTRY_COORDINATES_API_KEY, $COUNTRY_HOLIDAYS_API_KEY;
+    $username = 'sajid79';
+    $timezone_GeoName_url = "http://api.geonames.org/timezoneJSON?formatted=true";
+    $timezone_GeoName_url .= "&lat=" . $latitude;
+    $timezone_GeoName_url .= "&lng=" . $longitude;
+    $timezone_GeoName_url .= "&username=" . $username . "&style=full";
+    $response = curlRequest($timezone_GeoName_url, 'GET');
+    return $response;
+}
+
+function curlRequest($url, $method = "GET", $params = []) {
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => $url,
@@ -95,13 +97,13 @@ function curlRequest($url, $method = "GET", $params = [])
         CURLOPT_CUSTOMREQUEST => $method,
     ));
     $response = curl_exec($curl);
-    $response_data = curl_errno($curl) ? (object)[] : json_decode($response, true);
+    $response_data = curl_errno($curl) ? (object)[] : json_decode($response);
     if (curl_errno($curl)) {
-        $response_data = ['status' => false, 'message' => curl_error($curl)];
+        $response_data = (object)array('status' => false, 'message' => curl_error($curl));
     } else {
-        $response_data = ['status' => true, 'data' => $response_data];
+        $response_data = (object)array('status' => true, 'data' => $response_data);
     }
     curl_close($curl);
-    return (object) $response_data;
+    return $response_data;
 }
 ?>

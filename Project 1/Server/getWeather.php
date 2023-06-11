@@ -1,26 +1,26 @@
-
 <?php
+require('config.php');
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 $country_code = strtolower($_GET['country_code']);
 $country_name = $_GET['country_name'];
-$api_key = '498e4b11ada640dca187615cac3a761b'; // api key to get country lat lng
 
-//get Coordinates
-$url = 'https://api.opencagedata.com/geocode/v1/json?q='.urlencode($country_name).'&key=' . $api_key."&countrycode=".$country_code;
+// get Coordinates
+$url = 'https://api.opencagedata.com/geocode/v1/json?q='.urlencode($country_name).'&key=' 
+. $COUNTRY_COORDINATES_API_KEY."&countrycode=".$country_code;
 $url .= "&pretty=1"; 
 $url .= "&no_dedupe=1";  
 $url .= "&limit=1";  
 $coordinates = curlCoordinatesRequest($url,'GET');
 
-  // get Forcast
-$weather_api_key = 'c8b47ea87ffaa6ee3422a6d4d76ea858'; // api key to get Weather using country lat lng
+// get Forecast
 $weather_url = 'api.openweathermap.org/data/2.5/weather?';
 $weather_url .= "lat=".$coordinates['lat']; 
 $weather_url .= "&lon=".$coordinates['lng'];
-$weather_url .= "&appid=".$weather_api_key;  
-$forcast = curlRequest($weather_url,'GET');
-echo json_encode($forcast);
+$weather_url .= "&appid=".$COUNTRY_WEATHER_API_KEY;  
+$forecast = curlRequest($weather_url,'GET');
+echo json_encode($forecast);
+
 function curlCoordinatesRequest($url, $method = "GET", $params = [])
 {
     $coordinates_lat_lng['lat'] = null;
@@ -69,15 +69,6 @@ function curlRequest($url, $method = "GET", $params = [])
     }
     curl_close($curl);
     return (object)$response_data;
-}
-function apiKey($type){
-    $api_key = null;
-    if($type == "holiday"){
-        $api_key = "ae31777d49aab8fcd644b64cc968e5d50db44779";
-    }elseif($type == "weather"){
-        $api_key = "api_key_here";
-    }
-    return $api_key;
 }
 ?>
 
