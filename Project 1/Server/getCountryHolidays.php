@@ -1,4 +1,3 @@
-
 <?php
 require('config.php');
 ini_set('display_errors', 'On');
@@ -6,6 +5,7 @@ error_reporting(E_ALL);
 
 $url = $_POST['url'];
 $country_code = $_POST['country_code'];
+
 if(isset($_POST['data_type']) && ($_POST['data_type'] == 'holiday')){
     $current_year = date('Y');
     $params = [

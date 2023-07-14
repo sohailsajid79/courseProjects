@@ -1,4 +1,11 @@
+html,
 body {
+  margin: 0;
+  padding: 0;
+}
+
+#map1.leaflet-container {
+  /* preloader */
   background: linear-gradient(
     -45deg,
     #051937,
@@ -10,10 +17,11 @@ body {
   background-size: 400% 400%;
   animation: gradient 6s ease infinite;
   height: 100vh;
-
   text-align: center;
-  margin-top: 20px;
+  margin-top: 0;
+  overflow: hidden;
 }
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -26,14 +34,67 @@ body {
   }
 }
 
-#worldmap {
-  margin: 0 auto;
+#map1 {
+  width: 100%;
 }
+
+#worldmap {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
 #worldmap svg {
   background: rgba(50, 167, 224, 0.4);
-  /* border-radius: 200px; */
-  /* box-shadow: 0 0 10px rgba(157, 219, 255); */
+  padding: 9% 0 0 35%;
+  width: 100%;
+  height: 100vh;
 }
+
+@media only screen and (max-width: 425px) {
+  #worldmap svg {
+    padding: 19% 0 0 0%;
+    width: 100%;
+    height: 96vh;
+  }
+}
+@media only screen and (max-width: 1024) {
+  #worldmap svg {
+    padding: 11% 0 0 30%;
+    width: 100%;
+    height: 96vh;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #worldmap svg {
+    padding: 11% 0 0 24%;
+    width: 100%;
+    height: 96vh;
+  }
+}
+@media only screen and (max-width: 566px) {
+  #worldmap svg {
+    padding: 8% 0 0 13%;
+    width: 100%;
+    height: 96vh;
+  }
+}
+@media only screen and (max-width: 484px) {
+  #worldmap svg {
+    padding: 8% 0 0 7%;
+    width: 100%;
+    height: 96vh;
+  }
+}
+@media only screen and (max-width: 434px) {
+  #worldmap svg {
+    padding: 8% 0 0 4%;
+    width: 100%;
+    height: 96vh;
+  }
+}
+
 .land {
   fill: rgba(170, 209, 172);
 }
@@ -66,29 +127,100 @@ body {
     right: 250px;
   }
 }
+
 @media only screen and (max-width: 534px) {
   .leaflet-countryselect-container {
     right: 100px;
   }
 }
-@media only screen and (max-width: 425px) {
-  .leaflet-countryselect-container {
-    right: 100px;
-  }
-}
+
 @media only screen and (max-width: 425px) {
   .leaflet-countryselect-container {
     right: 47px;
   }
 }
 
+@media only screen and (max-width: 320px) {
+  .leaflet-countryselect-container {
+    right: 10px;
+  }
+}
+
+/* Modals media queries */
+@media only screen and (max-width: 576px) {
+  /* Small devices (up to 576px) */
+  #countryInfoModal .modal-dialog,
+  #tweetModal .modal-dialog {
+    max-width: 90%;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: calc(50vh - 30vh); /* Center vertically */
+  }
+
+  #countryInfoModal .modal-body,
+  #tweetModal .modal-body {
+    max-height: 60vh;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  /* Medium devices (up to 768px) */
+  #countryInfoModal .modal-dialog,
+  #tweetModal .modal-dialog {
+    max-width: 80%;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: calc(50vh - 40vh); /* Center vertically */
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  /* Large devices (up to 992px) */
+  #countryInfoModal .modal-dialog,
+  #tweetModal .modal-dialog {
+    max-width: 70%;
+    width: 70%;
+    margin: 0 auto;
+    margin-top: calc(50vh - 45vh); /* Center vertically */
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  /* Extra large devices (up to 1200px) */
+  #countryInfoModal .modal-dialog,
+  #tweetModal .modal-dialog {
+    max-width: 60%;
+    width: 60%;
+    margin: 0 auto;
+    margin-top: calc(50vh - 50vh); /* Center vertically */
+  }
+}
+
+.modal-body .table {
+  width: 100%;
+}
+
+.modal-body table tbody tr {
+  display: flex;
+}
+
+.modal-body table tbody td {
+  flex: 1;
+}
+
 .bootstrap-select .dropdown-menu {
   overflow: scroll;
 }
-#weatherModal,
+#countryInfoModal,
+#tweetModal,
 #holidaysModal,
-#economicsModal,
-#countryInfoModal {
+#weatherModal,
+#currencyModal {
   display: none;
   top: 26px;
 }
@@ -106,4 +238,100 @@ body {
 
 .leaflet-top {
   top: 26px;
+}
+
+#selectContainer {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  padding: 11px 0;
+}
+
+#countrySelect {
+  width: 200px;
+  margin: 0 auto;
+}
+
+/* modal header*/
+.modal-header {
+  background: linear-gradient(
+    -45deg,
+    #051937,
+    #004d7a,
+    #008793,
+    #00bf72,
+    #a8eb12
+  );
+  background-size: 400% 400%;
+  animation: gradient 6s ease infinite;
+}
+
+/* align modal text to the left*/
+.modal-header h2 {
+  padding: 16px;
+  color: #eff1ebdb;
+  font-family: "Arial", sans-serif;
+}
+
+.modal-body {
+  text-align: justify;
+}
+
+.modal-body .card {
+  text-align: left;
+}
+
+/* currency calculator divs organised vertically within the modal body*/
+.modal-body form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body form .form-floating {
+  margin-bottom: 10px;
+}
+
+/* Custom CSS styling for the News table cell */
+table {
+  width: 100%;
+}
+
+tr.news-row {
+  background-color: #b90005;
+}
+
+td.news {
+  padding: 3px 0;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  font-size: 44.8px;
+  text-align: center;
+}
+
+.news-row {
+  display: block;
+}
+
+.newsArticles {
+  width: 100%;
+  font-family: ReithSans, Arial, Helvetica, freesans, sans-serif;
+}
+
+.card-footer.py-3 {
+  background-color: rgb(90, 90, 90);
+}
+
+.card-footer__info a {
+  color: #ffffff;
+}
+
+/* Remove both the background color and outline  */
+.dropdown.bootstrap-select.selectContainer.form-select.shadow-sm.btn.btn-secondary.btn-lg {
+  background-color: transparent;
+  outline: none;
+  padding: 0;
+  margin: 0;
 }

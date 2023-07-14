@@ -36,8 +36,6 @@ if (!$timezone_info->status) {
             "timezoneId" => $timezone,
             "gmtOffset" => $gmtOffset,
             "currentTime" => $currentTime,
-            "longitude" => $longitude,
-            "latitude" => $latitude,
             "sunrise" => $sunrise,
             "sunset" => $sunset
         )

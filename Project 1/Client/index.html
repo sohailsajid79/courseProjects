@@ -6,18 +6,39 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Global Gazette</title>
+
+    <!-- Favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./src/favicon_io/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./src/favicon_io/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./src/favicon_io/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./src/favicon_io/site.webmanifest" />
+
+    <title>Gazetterr</title>
 
     <!-- Plugins -->
 
     <!-- Leaflet CSS -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css"
     />
     <link
       rel="stylesheet"
@@ -29,10 +50,6 @@
     <!-- Map Center Coordinates CSS -->
     <link rel="stylesheet" href="./dist/L.Control.MapCenterCoord.min.css" />
     <link rel="stylesheet" href="./src/L.Control.MapCenterCoord.css" />
-
-    <!-- Compass CSS -->
-    <link rel="stylesheet" href="./dist/leaflet-compass.min.css" />
-    <link rel="stylesheet" href="./src/leaflet-compass.src.css" />
 
     <!-- Tracking GPS Position -->
     <link
@@ -46,90 +63,155 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
 
-    <!-- Geo Plugin -->
-    <script
-      language="JavaScript"
-      src="http://www.geoplugin.net/javascript.gp"
-      type="text/javascript"
-    ></script>
-
     <!-- Marker Clustering CSS -->
     <link rel="stylesheet" href="./dist/MarkerCluster.css" />
     <link rel="stylesheet" href="./dist/MarkerCluster.Default.css" />
-
-    <!-- Rotating Globe CSS Part of Preload -->
-    <link rel="stylesheet" href="./src/style.css" />
 
     <!-- Control Buttons with Icons and Callbacks CSS -->
     <link rel="stylesheet" href="./src/easy-button.css" />
 
     <!-- Supporting Stylesheets -->
-    <link rel="stylesheet" href="./src/index.css" />
+    <link rel="stylesheet" href="./src/style.css" />
   </head>
 
   <body>
-    <!-- Map Container -->
-    <div id="map-container" style="position: relative">
-      <!-- Preloader -->
-      <div id="loader" class="loader leaflet-control leaflet-bar"></div>
-      <!--Map -->
-      <div class="country-search">
-        <select
-          class="selectpicker"
-          data-title="Select Country"
-          id="country-select-box"
-          data-live-search="true"
-        ></select>
+    <!-- Country Dropdown List -->
+    <div
+      id="nav-container"
+      class="navbar fixed-top navbar-expand-lg p-md-3 justify-content-center"
+      style="width: 220px; height: 56px; margin: 0 auto"
+    >
+      <div class="form-inline my-2 my-lg-0" id="form-container">
+        <div class="btn-group">
+          <select
+            class="selectContainer form-select shadow-sm selectpicker btn btn-secondary btn-lg"
+            data-toggle="dropdown"
+            data-title="Select Country"
+            id="country-select-box"
+          >
+            <option value=""></option>
+          </select>
+        </div>
       </div>
-      <div id="worldmap"></div>
     </div>
+
+    <!-- Map -->
+    <div id="worldmap"></div>
 
     <!-- Country Info Modal -->
     <div
       class="modal fade"
       id="countryInfoModal"
+      id="modalScrollable"
       tabindex="-1"
+      role="dialog"
       aria-labelledby="CountryInfo"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 class="countryName" id="countryName">Country Overview</h2>
-          </div>
-          <div class="modal-body">
-            <table class="table">
-              <tbody>
-                <tr>
-                  <td>Timezone</td>
-                  <td class="tableText" id="timezone"></td>
-                </tr>
-                <tr>
-                  <td>GMT offset</td>
-                  <td class="tableText" id="gmtOffset"></td>
-                </tr>
-                <tr>
-                  <td>Current Time</td>
-                  <td class="tableText" id="currentTime"></td>
-                </tr>
-                <tr>
-                  <td>Longitude</td>
-                  <td class="tableText" id="longitude"></td>
-                </tr>
-                <tr>
-                  <td>Latitude</td>
-                  <td class="tableText" id="latitude"></td>
-                </tr>
-                <tr>
-                  <td>Sunrise</td>
-                  <td class="tableText" id="sunrise"></td>
-                </tr>
-                <tr>
-                  <td>Sunset</td>
-                  <td class="tableText" id="sunset"></td>
-                </tr>
-              </tbody>
-            </table>
+      <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="countryName" id="countryName">Country Overview</h2>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Sub-Region</td>
+                    <td class="tableText" id="subregion"></td>
+                  </tr>
+                  <tr>
+                    <td>Population</td>
+                    <td class="tableText" id="population"></td>
+                  </tr>
+                  <tr>
+                    <td>Capital</td>
+                    <td class="tableText" id="capital"></td>
+                  </tr>
+                  <tr>
+                    <td>Timezone</td>
+                    <td class="tableText" id="timezone"></td>
+                  </tr>
+                  <tr>
+                    <td>UTC offset</td>
+                    <td class="tableText" id="utcOffset"></td>
+                  </tr>
+                  <tr>
+                    <td>Current Time</td>
+                    <td class="tableText" id="currentTime"></td>
+                  </tr>
+                  <tr>
+                    <td>Sunrise</td>
+                    <td class="tableText" id="sunrise"></td>
+                  </tr>
+                  <tr>
+                    <td>Sunset</td>
+                    <td class="tableText" id="sunset"></td>
+                  </tr>
+
+                  <tr>
+                    <table>
+                      <tbody>
+                        <tr class="news-row">
+                          <td class="news" colspan="2">News</td>
+                        </tr>
+                        <tr>
+                          <td class="newsArticles">
+                            <section id="focus" class="focus-section">
+                              <div class="container-lg py-5">
+                                <div class="row">
+                                  <div class="col">
+                                    <div class="card shadow-sm h-100">
+                                      <div class="card-image">
+                                        <div class="hover-text">
+                                          <img
+                                            src="https://source.unsplash.com/user/xteemu/800x600"
+                                            class="card-img-top"
+                                            alt="..."
+                                          /><!-- Image here -->
+                                        </div>
+                                        <div class="image-overlay"></div>
+                                      </div>
+
+                                      <div class="card-body">
+                                        <h3 class="card-title"></h3>
+                                        <!-- Title here -->
+                                        <p class="card-description"></p>
+                                        <!-- Description here -->
+                                      </div>
+                                      <div class="card-footer py-3">
+                                        <div
+                                          class="card-footer__info row justify-content-between"
+                                        >
+                                          <span
+                                            class="col-auto"
+                                            class="articleDate"
+                                          ></span
+                                          ><!-- Date here -->
+                                          <span class="col-auto read-more">
+                                            <a
+                                              class="text-uppercase read-more-3"
+                                              class="articleURL"
+                                              href="#"
+                                              >Read more</a
+                                            ><!-- Url here -->
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </section>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -139,32 +221,35 @@
     <div
       class="modal fade"
       id="tweetModal"
+      id="modalScrollable"
       tabindex="-1"
+      role="dialog"
       aria-labelledby="tweet"
       aria-hidden="true"
     >
-      <div
-        class="modal-dialog"
-        style="max-width: max-content !important ; width: 92% !important"
-      >
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 class="countryTweets" id="countryTweets">Tweets</h2>
-          </div>
-          <div class="modal-body" style="overflow-x: auto">
-            <table class="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>Date & Time</th>
-                  <th>ID</th>
-                  <th>Tweet</th>
-                  <th>Link to Tweet</th>
-                </tr>
-              </thead>
-              <tbody id="addTweets">
-                <!-- Tweets will be appended here -->
-              </tbody>
-            </table>
+      <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div
+          class="modal-dialog"
+          style="max-width: max-content !important ; width: 92% !important"
+        >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="countryTweets" id="countryTweets">Tweets</h2>
+            </div>
+            <div class="modal-body" style="overflow-x: auto">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Date & Time</th>
+                    <th>Tweet</th>
+                    <!-- includes link to tweet -->
+                  </tr>
+                </thead>
+                <tbody id="addTweets">
+                  <!-- Tweets will be appended here -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -238,6 +323,60 @@
       </div>
     </div>
 
+    <!-- Currency Exchange Rate Modal -->
+    <div
+      class="modal fade"
+      id="currencyModal"
+      tabindex="-1"
+      aria-labelledby="currencyModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title">Currency Calculator</h2>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-floating mb-3">
+                <input
+                  id="fromAmount"
+                  type="number"
+                  class="form-control"
+                  value="1"
+                  min="1"
+                  onchange="formatDecimal(this)"
+                />
+
+                <label id="fromCountry">From USD $</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input
+                  type="countrySelect"
+                  type="text"
+                  class="form-control"
+                  disabled
+                />
+                <label id="toCountry">Convert to</label>
+                <!-- Currency Name -->
+              </div>
+
+              <div class="form-floating">
+                <input
+                  id="toAmount"
+                  type="text"
+                  class="form-control"
+                  disabled
+                />
+                <label for="toAmount">Latest Update</label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -257,10 +396,6 @@
     <script src="./dist/L.Control.MapCenterCoord.min.js"></script>
     <script src="./src/L.Control.MapCenterCoord.js"></script>
 
-    <!-- Compass JS -->
-    <script src="./dist/leaflet-compass.min.js"></script>
-    <script src="./src/leaflet-compass.src.js"></script>
-
     <!-- Tracking GPS Position JS -->
     <script src="
      https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js
@@ -274,7 +409,7 @@
     <script src="./dist/leaflet.markercluster-src.js"></script>
     <script src="./src/MarkerCluster.js"></script>
 
-    <!-- Rotating Globe JS Part of Preload -->
+    <!-- Rotating globe JS Part of Preload; source Code Pen @Gartempe -->
     <script src="./src/script.js"></script>
 
     <!-- Control Buttons with Icons and Callbacks JS -->
@@ -287,10 +422,12 @@
       crossorigin="anonymous"
     ></script>
 
+    <!-- Numeral.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
     <!-- Supporting JS files -->
-    <script src="./src/Leaflet.CountrySelect.js"></script>
+    <script src="./src/Leafet.CountrySelect.js"></script>
     <script src="./src/moment.js"></script>
     <script src="./src/app.js"></script>
-    <script src="./src/centralBanksGeoJSON.js"></script>
   </body>
 </html>
