@@ -17,7 +17,7 @@ if ($response === false) {
         $fromCurrency = $data['base_code'];
         $toCurrency = $data['target_code'];
         $exchangeRate = $data['conversion_rate'];
-        $convertedAmount = $data['converted_amount'];
+        $convertedAmount = $data['conversion_result'];
         
         echo "Converted Amount: {$amount} {$fromCurrency} = {$convertedAmount} {$toCurrency}\n";
 

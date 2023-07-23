@@ -1,13 +1,15 @@
 <?php
 require('config.php');
-$countryCode = urlencode($_GET['countryCode']);
-$url = "https://gnews.io/api/v4/search?q=example&lang=en&country={$countryCode}&max=5&apikey={$NEWS_API_KEY}";
+$country_code = urlencode($_GET['country_code']);
+$url = "https://gnews.io/api/v4/search?q=example&lang=en&country={$country_code}&max=5&apikey={$NEWS_API_KEY}";
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $data = json_decode(curl_exec($ch), true);
 curl_close($ch);
+// print_r($data);
+// exit();
 $articles = $data['articles'];
 
 $response = array();
