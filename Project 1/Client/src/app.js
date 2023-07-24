@@ -355,50 +355,46 @@ $(document).ready(function () {
           };
 
           // Make AJAX request to fetch Rest Country Info
-          $.ajax(restCountrySettings)
-            .done(function (restCountryResult) {
-              if (restCountryResult.region) {
-                $("#region").text(restCountryResult.region);
-                $("#subregion").text(restCountryResult.subregion);
-                $("#population").text(
-                  numeral(restCountryResult.population).format("0,0")
-                );
-                $("#capital").text(restCountryResult.capital);
-                $("#timezones").text(restCountryResult.timezones);
-                $("#flag").html(
-                  '<img src="' + restCountryResult.flags.png + '">'
-                );
+          $.ajax(restCountrySettings).done(function (restCountryResult) {
+            if (restCountryResult.region) {
+              $("#region").text(restCountryResult.region);
+              $("#subregion").text(restCountryResult.subregion);
+              $("#population").text(
+                numeral(restCountryResult.population).format("0,0")
+              );
+              $("#capital").text(restCountryResult.capital);
+              $("#timezones").text(restCountryResult.timezones);
+              $("#flag").html(
+                '<img src="' + restCountryResult.flags.png + '">'
+              );
 
-                let lat = restCountryResult.latitude;
-                let lng = restCountryResult.longitude;
+              let lat = restCountryResult.latitude;
+              let lng = restCountryResult.longitude;
 
-                let username = "sajid79";
-                let timezoneUrl = `http://api.geonames.org/timezoneJSON?lat=${lat}&lng=${lng}&username=${username}`;
+              let username = "sajid79";
+              let timezoneUrl = `http://api.geonames.org/timezoneJSON?lat=${lat}&lng=${lng}&username=${username}`;
 
-                $.ajax({
-                  url: timezoneUrl,
-                  method: "GET",
-                  dataType: "json",
+              $.ajax({
+                url: timezoneUrl,
+                method: "GET",
+                dataType: "json",
+              })
+                .done(function (timezoneResult) {
+                  let sunrise = timezoneResult.sunrise.split(" ")[1];
+                  let sunset = timezoneResult.sunset.split(" ")[1];
+
+                  $("#sunrise").text(sunrise);
+                  $("#sunset").text(sunset);
+
+                  resolve({ lat, lng });
                 })
-                  .done(function (timezoneResult) {
-                    let sunrise = timezoneResult.sunrise.split(" ")[1];
-                    let sunset = timezoneResult.sunset.split(" ")[1];
-
-                    $("#sunrise").text(sunrise);
-                    $("#sunset").text(sunset);
-
-                    resolve({ lat, lng });
-                  })
-                  .fail(function (jqXHR, textStatus, errorThrown) {
-                    reject("Failed to fetch timezone data: " + errorThrown);
-                  });
-              } else {
-                reject("Failed to fetch Rest Country information.");
-              }
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-              reject("Failed to fetch Rest Country Info: " + errorThrown);
-            });
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                  reject("Failed to fetch timezone data: " + errorThrown);
+                });
+            } else {
+              reject("Failed to fetch Rest Country information.");
+            }
+          });
         }
       });
     }
@@ -438,7 +434,7 @@ $(document).ready(function () {
         // Make AJAX request to fetch news
         $.ajax(newsSettings)
           .done(function (newsResponse) {
-            console.log("News response:", newsResponse);
+            //console.log("News response:", newsResponse);
             if (
               newsResponse &&
               newsResponse.articles &&
@@ -519,7 +515,19 @@ $(document).ready(function () {
           },
           success: function (data) {
             //console.log(data);
-            $("#toAmount").val(data);
+            const exc_Result = data.slice(data.indexOf("=") + 1);
+            let number = parseFloat(exc_Result.match(/[\d\.]+/));
+            // Display output if number extracted
+            // console.log(number);
+            const fixed_Result = number.toFixed(2);
+            let mystr =
+              "Converted Amount: " +
+              amountval +
+              " USD = " +
+              fixed_Result +
+              " " +
+              quoteCurrencyval;
+            $("#toAmount").val(mystr);
           },
           error: function (e) {
             console.log(e.message);
@@ -699,8 +707,17 @@ function exchange_currency_func() {
       amount: amountval,
     },
     success: function (data) {
-      console.log(data);
-      $("#toAmount").val(data);
+      const exc_Result = data.slice(data.indexOf("=") + 1);
+      let number = parseFloat(exc_Result.match(/[\d\.]+/));
+      const fixed_Result = number.toFixed(2);
+      let mystr =
+        "Converted Amount: " +
+        amountval +
+        " USD = " +
+        fixed_Result +
+        " " +
+        quoteCurrencyval;
+      $("#toAmount").val(mystr);
     },
     error: function (e) {
       console.log(e.message);

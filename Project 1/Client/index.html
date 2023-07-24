@@ -63,10 +63,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
 
-    <!-- Marker Clustering CSS -->
-    <link rel="stylesheet" href="./dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="./dist/MarkerCluster.Default.css" />
-
     <!-- Control Buttons with Icons and Callbacks CSS -->
     <link rel="stylesheet" href="./src/easy-button.css" />
 
@@ -293,7 +289,9 @@
           <div class="modal-header">
             <h2 class="countryWeather" id="countryWeather">Weather Forecast</h2>
           </div>
-          <div class="modal-body weather-modal"></div>
+          <div class="modal-body weather-modal">
+            <!-- Forecast goes here -->
+          </div>
         </div>
       </div>
     </div>
@@ -387,10 +385,6 @@
     <!-- Globe Minimap JS -->
     <script src="./dist/Control.GlobeMiniMap.min.js"></script>
     <script src="./src/Control.GlobeMiniMap.js"></script>
-
-    <!-- Marker Clustering JS -->
-    <script src="./dist/leaflet.markercluster-src.js"></script>
-    <script src="./src/MarkerCluster.js"></script>
 
     <!-- Rotating globe JS Part of Preload; source Code Pen @Gartempe -->
     <script src="./src/script.js"></script>

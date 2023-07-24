@@ -4,7 +4,11 @@ $data = file_get_contents("https://restcountries.com/v3.1/alpha/$country_code");
 
 header('Content-Type: application/json; charset=UTF-8');
 
+// Remove any unwanted characters
+$data = str_replace(['<br />', '<b>', '</b>'], '', $data);
+
 $countryData = json_decode($data, true);
+
 if ($countryData) {
   $region = $countryData[0]['region'];
   $subregion = $countryData[0]['subregion'];
@@ -14,19 +18,17 @@ if ($countryData) {
   $flags = $countryData[0]['flags'];
   
   // Get currency name and symbol
-  // Get currency name and symbol
-if (isset($countryData[0]['currencies']) && !empty($countryData[0]['currencies'])) {
-  $currency = $countryData[0]['currencies'];
-  $currencyKeys = array_keys($currency);
-  $currencyCode = $currencyKeys[0];
+  if (isset($countryData[0]['currencies']) && !empty($countryData[0]['currencies'])) {
+    $currency = $countryData[0]['currencies'];
+    $currencyKeys = array_keys($currency);
+    $currencyCode = $currencyKeys[0];
 
-  $currencyName = $currency[$currencyCode]['name'] ?? null;
-  $currencySymbol = $currency[$currencyCode]['symbol'] ?? null;
-} else {
-  $currencyName = null;
-  $currencySymbol = null;
-}
-
+    $currencyName = $currency[$currencyCode]['name'] ?? null;
+    $currencySymbol = $currency[$currencyCode]['symbol'] ?? null;
+  } else {
+    $currencyName = null;
+    $currencySymbol = null;
+  }
 
   // Get latitude and longitude
   $latitude = $countryData[0]['latlng'][0];
