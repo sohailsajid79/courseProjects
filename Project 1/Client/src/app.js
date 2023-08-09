@@ -2,6 +2,10 @@ let ctry;
 let map;
 let first_time_country_name = 0;
 let navigation_country_name;
+let airports;
+let cities;
+let airportIcon;
+let cityIcon;
 
 $.getJSON("./src/countryBorders.geo.json", function (jsonData) {
   ctry = jsonData;
@@ -9,7 +13,7 @@ $.getJSON("./src/countryBorders.geo.json", function (jsonData) {
 
 $(document).ready(function () {
   $("#nav-container").hide();
-
+  let country_icons = {};
   // AJAX request to get the country code and name
   function getCountryCode_Name() {
     $.ajax({
@@ -27,6 +31,8 @@ $(document).ready(function () {
         $.each(countries, function (index, country) {
           const option = createOptionElement(country.name, country.code);
           countrySelectBox.append(option);
+          country_icons[country.code.toLowerCase()] =
+            country.name.toLowerCase();
         });
 
         // Refresh the selectpicker after adding options
@@ -89,30 +95,37 @@ $(document).ready(function () {
       });
     }
 
-    // AJAX request to get countryCode
-    $.ajax({
-      url: "../Server/getLatLon.php",
-      data: {
-        lat: lat,
-        lon: lon,
-        username: "sajid79",
-      },
-      type: "GET",
-      success: function (data) {
-        isoCode = data.replace(/(\r\n|\n|\r)/gm, "");
-        navigation_country_name = isoCode;
-        //console.log(isoCode);
-        coord(pos); // Call the coord function with the position
-      },
-      error: function (e) {
-        console.log(e.message);
-      },
-    });
+    // AJAX request to get countryCode from Latitude and Longitude
+    if (lat && lon) {
+      $.ajax({
+        url: "../Server/getLatLon.php",
+        data: {
+          lat: lat,
+          lon: lon,
+          username: "sajid79",
+        },
+        type: "GET",
+        success: function (data) {
+          isoCode = data.replace(/(\r\n|\n|\r)/gm, "");
+          navigation_country_name = isoCode;
+          //console.log(isoCode);
+          coord(pos); // Call the coord function with the position
+        },
+        error: function (e) {
+          console.error(
+            "Error fetching latitude and longitude:",
+            e.responseText
+          );
+        },
+      });
+    } else {
+      console.error("Error: Latitude and longitude are required.");
+    }
   }
 
   const mapInitiate = (lat, lon) => {
     // Map initialisation and configuration
-    const map = L.map("map1").setView([lat, lon], 3);
+    map = L.map("map1").setView([lat, lon], 3);
     const defaultMap = L.tileLayer(
       "https://{s}.tile.jawg.io/jawg-terrain/{z}/{x}/{y}{r}.png?access-token=aHphYXDNuNflWVD8pVJ6MOniqzyDItliVum1XRNSwsPViql22lcjbOr9kBu1Y1nN",
       {
@@ -164,6 +177,26 @@ $(document).ready(function () {
       }
     );
 
+    airports = L.markerClusterGroup({
+      polygonOptions: {
+        fillColor: "#fff",
+        color: "#000",
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.5,
+      },
+    }).addTo(map);
+
+    cities = L.markerClusterGroup({
+      polygonOptions: {
+        fillColor: "#fff",
+        color: "#000",
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.5,
+      },
+    }).addTo(map);
+
     // Leafet layer control
     const baseMaps = {
       Default: defaultMap,
@@ -172,8 +205,28 @@ $(document).ready(function () {
       Satellite: USImageryTopo,
     };
 
-    const layerControl = L.control.layers(baseMaps);
-    layerControl.addTo(map);
+    const overlays = {
+      Airports: airports,
+      Cities: cities,
+    };
+
+    // Initialize the Layer Control
+    let layerControl = L.control.layers(baseMaps, overlays).addTo(map);
+
+    airportIcon = L.ExtraMarkers.icon({
+      prefix: "fa",
+      icon: "fa-plane",
+      iconColor: "black",
+      markerColor: "white",
+      shape: "square",
+    });
+
+    cityIcon = L.ExtraMarkers.icon({
+      prefix: "fa",
+      icon: "fa-city",
+      markerColor: "green",
+      shape: "square",
+    });
 
     // Move radio buttons to the left
     const container = layerControl.getContainer();
@@ -264,8 +317,8 @@ $(document).ready(function () {
         alert("Please select the country");
       } else {
         getCountryInfo(country_code)
-          .then(({ lat, lng }) => {
-            getWeatherInfo(lat, lng)
+          .then(({ lat, lon }) => {
+            getWeatherInfo(lat, lon)
               .then((weatherData) => {
                 // Update current weather elements in the modal with the retrieved data
                 $(".weather-icon").html(
@@ -369,24 +422,34 @@ $(document).ready(function () {
               );
 
               let lat = restCountryResult.latitude;
-              let lng = restCountryResult.longitude;
+              let lon = restCountryResult.longitude;
 
               let username = "sajid79";
-              let timezoneUrl = `http://api.geonames.org/timezoneJSON?lat=${lat}&lng=${lng}&username=${username}`;
+
+              let reqData = {
+                lat,
+                lon,
+                username,
+              };
 
               $.ajax({
-                url: timezoneUrl,
+                url: "../Server/getCountryInfo.php",
                 method: "GET",
                 dataType: "json",
+                data: reqData,
               })
                 .done(function (timezoneResult) {
-                  let sunrise = timezoneResult.sunrise.split(" ")[1];
-                  let sunset = timezoneResult.sunset.split(" ")[1];
+                  const sunrise = timezoneResult.sunrise
+                    ? timezoneResult.sunrise.split(" ")[1]
+                    : "N/A";
+                  const sunset = timezoneResult.sunset
+                    ? timezoneResult.sunset.split(" ")[1]
+                    : "N/A";
 
                   $("#sunrise").text(sunrise);
                   $("#sunset").text(sunset);
 
-                  resolve({ lat, lng });
+                  resolve({ lat, lon });
                 })
                 .fail(function (jqXHR, textStatus, errorThrown) {
                   reject("Failed to fetch timezone data: " + errorThrown);
@@ -405,10 +468,10 @@ $(document).ready(function () {
         alert("Please select the country");
       } else {
         getCountryInfo(country_code)
-          .then(({ lat, lng }) => {
+          .then(({ lat, lon }) => {
             // global variables
             //console.log("Latitude:", lat);
-            //console.log("Longitude:", lng);
+            //console.log("Longitude:", lon);
           })
           .catch((error) => {
             console.error(error);
@@ -602,15 +665,6 @@ $(document).ready(function () {
       })
       .addTo(map);
 
-    // // 3d Globe minimap for leaflet
-    // const miniMap = new L.Control.GlobeMiniMap({
-    //   position: "bottomright",
-    //   land: "#AAD1AC",
-    //   water: "#9DDBFF",
-    //   marker: "#FF6400",
-    //   topojsonSrc: "./src/world.json",
-    // }).addTo(map);
-
     // Tracking GPS Position
     const options = {
       position: "topleft",
@@ -623,16 +677,18 @@ $(document).ready(function () {
     // get Location Modal
     const locationControl = L.control.locate(options).addTo(map);
 
-    window.addLayers = function (countryBorders_jsonData) {
+    window.addLayers = function (formattedObject) {
       let layer_data = localStorage.getItem("layer_id");
       map.eachLayer(function (layer) {
         if (layer._leaflet_id == layer_data) {
           map.removeLayer(layer);
         }
       });
-      let layer_name = L.geoJSON(countryBorders_jsonData).addTo(map);
-      map.fitBounds(layer_name.getBounds());
-      localStorage.setItem("layer_id", layer_name._leaflet_id);
+      let layer_name = L.geoJSON(formattedObject).addTo(map);
+      setTimeout(() => {
+        map.fitBounds(layer_name.getBounds());
+        localStorage.setItem("layer_id", layer_name._leaflet_id);
+      }, 200);
     };
     $("#country-select-box").css("display", "block");
 
@@ -681,19 +737,79 @@ $(document).ready(function () {
           },
           geometry: feature.geometry,
         };
+        break;
       }
     }
     let polygons = formattedObject;
     polygons = polygons == undefined ? [] : polygons;
     window.addLayers(polygons);
     first_time_country_name = 1;
+
+    // get Airport data
+    $.ajax({
+      type: "GET",
+      url: "../Server/getAirport.php",
+      data: {
+        iso_a2: country,
+      },
+      success: function (data) {
+        // console.log(JSON.parse(data));
+        if (map.hasLayer(airports)) {
+          map.removeLayer(airports);
+          airports.clearLayers();
+        }
+        let airportsData = JSON.parse(JSON.parse(data));
+        airportsData.data.forEach(function (item) {
+          L.marker([item.lat, item.lng], { icon: airportIcon })
+            .bindTooltip(item.name, { direction: "top", sticky: true })
+            .addTo(airports);
+        });
+        map.addLayer(airports);
+      },
+      error: function (e) {
+        console.log(e.message);
+      },
+    });
+
+    // get Cities Data
+    $.ajax({
+      type: "GET",
+      url: "../Server/getCities.php",
+      data: {
+        iso_a2: country,
+      },
+      success: function (data) {
+        // console.log(JSON.parse(data));
+        if (map.hasLayer(cities)) {
+          map.removeLayer(cities);
+          cities.clearLayers();
+        }
+        let citiesData = JSON.parse(JSON.parse(data));
+        citiesData.data.forEach(function (item) {
+          L.marker([item.lat, item.lng], { icon: cityIcon })
+            .bindTooltip(
+              "<div class='col text-center'><strong>" +
+                item.name +
+                "</strong><br><i>(" +
+                numeral(item.population).format("0,0") +
+                ")</i></div>",
+              { direction: "top", sticky: true }
+            )
+            .addTo(cities);
+        });
+        map.addLayer(cities);
+      },
+      error: function (e) {
+        console.log(e.message);
+      },
+    });
   });
 });
 
 function exchange_currency_func() {
   let amountval = $("#fromAmount").val();
   let ctry_iso_a2 = $("#country-select-box option:selected").val();
-  var currency_code_obj = currency_codes.find(
+  let currency_code_obj = currency_codes.find(
     (crncy_code) => crncy_code.iso_a2 === ctry_iso_a2
   );
   let quoteCurrencyval = currency_code_obj.code;
