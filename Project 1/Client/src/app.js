@@ -52,7 +52,6 @@ $(document).ready(function () {
     return option;
   }
 
-  // Call the function to fetch and populate country data
   getCountryCode_Name();
   getGeoLocation();
 
@@ -211,7 +210,12 @@ $(document).ready(function () {
     };
 
     // Initialize the Layer Control
-    let layerControl = L.control.layers(baseMaps, overlays).addTo(map);
+    let layerControl = L.control.layers(baseMaps, overlays, {
+      position: "topright",
+      collapsed: true,
+    });
+    layerControl.addTo(map);
+    L.DomUtil.addClass(layerControl._container, "custom-layer-control");
 
     airportIcon = L.ExtraMarkers.icon({
       prefix: "fa",
@@ -242,7 +246,6 @@ $(document).ready(function () {
       $("#addHolidays").html("");
       let country_code = $("#country-select-box").val();
       if (country_code == "") {
-        alert("Please select the country");
       } else {
         let data = {
           url: "https://calendarific.com/api/v2/holidays",
@@ -282,7 +285,7 @@ $(document).ready(function () {
     // get Weather
     function getWeatherInfo(lat, lon) {
       if (lat === undefined || lon === undefined) {
-        alert("Latitude and longitude are required.");
+        console.log("Latitude and longitude are required.");
         return Promise.reject("Latitude and longitude are required.");
       }
 
@@ -314,7 +317,6 @@ $(document).ready(function () {
     $(document).on("change", "#country-select-box", function (event) {
       let country_code = $("#country-select-box").val();
       if (country_code === "") {
-        alert("Please select the country");
       } else {
         getCountryInfo(country_code)
           .then(({ lat, lon }) => {
@@ -396,7 +398,6 @@ $(document).ready(function () {
     function getCountryInfo(country_code) {
       return new Promise((resolve, reject) => {
         if (country_code === "") {
-          reject("Please select the country");
         } else {
           let restCountrySettings = {
             dataType: "json",
@@ -439,15 +440,20 @@ $(document).ready(function () {
                 data: reqData,
               })
                 .done(function (timezoneResult) {
-                  const sunrise = timezoneResult.sunrise
-                    ? timezoneResult.sunrise.split(" ")[1]
-                    : "N/A";
-                  const sunset = timezoneResult.sunset
-                    ? timezoneResult.sunset.split(" ")[1]
-                    : "N/A";
+                  let sunrise = timezoneResult.sunrise;
+                  let sunset = timezoneResult.sunset;
 
-                  $("#sunrise").text(sunrise);
-                  $("#sunset").text(sunset);
+                  const formattedSunrise = moment(
+                    sunrise,
+                    "YYYY-MM-DD HH:mm"
+                  ).format("HH:mm");
+                  const formattedSunset = moment(
+                    sunset,
+                    "YYYY-MM-DD HH:mm"
+                  ).format("HH:mm");
+
+                  $("#sunrise").text(formattedSunrise);
+                  $("#sunset").text(formattedSunset);
 
                   resolve({ lat, lon });
                 })
@@ -465,7 +471,6 @@ $(document).ready(function () {
     $(document).on("change", "#country-select-box", function (event) {
       let country_code = $("#country-select-box").val();
       if (country_code === "") {
-        alert("Please select the country");
       } else {
         getCountryInfo(country_code)
           .then(({ lat, lon }) => {
@@ -483,7 +488,6 @@ $(document).ready(function () {
     $(document).on("change", "#country-select-box", function (event) {
       let country_code = $("#country-select-box").val();
       if (country_code === "") {
-        alert("Please select the country");
       } else {
         let newsSettings = {
           dataType: "json",

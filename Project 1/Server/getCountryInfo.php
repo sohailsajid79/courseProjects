@@ -1,9 +1,9 @@
 <?php
     try {
         $lat = $_GET['lat'];
-        $lon = $_GET['lon'];
+        $lng = $_GET['lon'];
         $username = $_GET['username'];
-        $timezoneUrl = "http://api.geonames.org/timezoneJSON?lat=" . $lat . "&lng=" . $lon . "&username=" . $username;
+        $timezoneUrl = "http://api.geonames.org/timezoneJSON?lat=" . $lat . "&lng=" . $lng . "&username=" . $username;
     
         header('Access-Control-Allow-Origin: *');
         $timezoneData = file_get_contents($timezoneUrl);

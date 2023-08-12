@@ -27,7 +27,7 @@
     />
     <link rel="manifest" href="./src/favicon_io/site.webmanifest" />
 
-    <title>Gazette</title>
+    <title>Gazetteer</title>
 
     <!-- Plugins -->
 
@@ -62,23 +62,18 @@
     <link rel="stylesheet" href="./src/easy-button.css" />
 
     <!-- Marker Cluster -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css"
-    />
+    <link rel="stylesheet" href="./dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="./dist/MarkerCluster.css" />
 
     <!-- Leaflet Extra Markers -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/leaflet-extra-markers@1.2.2/dist/css/leaflet.extra-markers.min.css"
-    />
+    <link rel="stylesheet" href="./src/leaflet_extra_markers.css" />
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="./src/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
 
     <!-- My Code -->
     <link rel="stylesheet" href="./src/style.css" />
@@ -385,10 +380,10 @@
     <script src="./src/L.Control.MapCenterCoord.js"></script>
 
     <!-- Marker Cluster -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+    <script src="./dist/leaflet.markercluster-src.js"></script>
 
     <!-- Leaflet Extra Markers -->
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-extra-markers@1.2.2/dist/js/leaflet.extra-markers.min.js"></script>
+    <script src="./src/leaflet_extra_markers.js"></script>
 
     <!-- Tracking GPS Position JS -->
     <script src="./dist/L.Control.Locate.min.js"></script>
@@ -402,6 +397,7 @@
     <script src="./src/script.js"></script>
 
     <!-- Control Buttons with Icons and Callbacks JS -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
     <script src="./src/easy-button.js"></script>
 
     <!-- Font Awesome -->
