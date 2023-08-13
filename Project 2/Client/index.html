@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./src/favicon/16.png"
+    />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./src/favicon/32.png"
+    />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="./src/favicon/96.png"
+    />
+
+    <title>Company Directory</title>
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" href="./src/bootstrap.min.css" />
+
+    <!-- Font Awesome 6.4.2 For The Web -->
+    <link rel="stylesheet" href="./src/css/all.min.css" />
+    <link rel="stylesheet" href="./src/css/fontawesome.min.css" />
+
+    <!-- My Code -->
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+
+  <body>
+    <!--preloader-->
+    <div id="preloader"></div>
+
+    <nav
+      class="navbar navbar-expand-lg navbar-light"
+      style="background-color: #ff8000"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold"
+          ><i class="fa-solid fa-people-group"></i>Directory</a
+        >
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fa-solid fa-building"></i>
+                Department
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#departmentModal"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Edit Department
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Static Department Modal -->
+            <div
+              class="modal fade"
+              id="departmentModal"
+              tabindex="-1"
+              aria-labelledby="departmentModalLabel"
+              aria-hidden="true"
+              data-bs-backdrop="static"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="departmentModalLabel">
+                      Department Modal
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Modal content goes here -->
+                    This is a static department modal.
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fa-solid fa-globe"></i>
+                Location
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticModal"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Edit Location
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Location Static Modal -->
+            <div
+              class="modal fade"
+              id="staticModal"
+              tabindex="-1"
+              aria-labelledby="staticModalLabel"
+              aria-hidden="true"
+              data-bs-backdrop="static"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticModalLabel">
+                      Static Modal
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Modal content goes here -->
+                    This is a static modal.
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Employee -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#addEmployeeModal"
+                data-bs-toggle="modal"
+              >
+                <i class="fa-solid fa-user-plus"></i>
+                Add Employee
+              </a>
+            </li>
+
+            <!-- Static Modal -->
+            <div
+              class="modal fade"
+              id="addEmployeeModal"
+              tabindex="-1"
+              aria-labelledby="addEmployeeModalLabel"
+              aria-hidden="true"
+              data-bs-backdrop="static"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="addEmployeeModalLabel">
+                      <i class="fa-solid fa-user-plus"></i>
+                      Details
+                    </h5>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label for="firstName"></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="firstName"
+                          placeholder="First Name"
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label for="lastName"></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="lastName"
+                          placeholder="Last Name"
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label for="title"></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="title"
+                          placeholder="Title"
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label for="department"></label>
+                        <select
+                          class="form-control"
+                          id="department"
+                          placeholder="Department"
+                        >
+                          <option value="">Select Department</option>
+                          <option value="1">Department 1</option>
+                          <option value="2">Department 2</option>
+                          <option value="3">Department 3</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="location"></label>
+                        <select
+                          class="form-control"
+                          id="location"
+                          placeholder="Location"
+                        >
+                          <option value="">Select Location</option>
+                          <option value="1">Location 1</option>
+                          <option value="2">Location 2</option>
+                          <option value="3">Location 3</option>
+                        </select>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ul>
+          <form class="d-flex">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-dark" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Plugins js -->
+    <!-- jQuery -->
+    <script src="./src/jquery-3.7.0.min.js"></script>
+
+    <!-- Bootstrap js -->
+    <script src="./src/bootstrap.bundle.min.js"></script>
+
+    <!-- My Code -->
+    <script src="./src/app.js"></script>
+  </body>
+</html>
