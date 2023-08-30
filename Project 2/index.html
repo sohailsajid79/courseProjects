@@ -67,16 +67,21 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <!-- nav bar -->
+          <!-- nav Bar -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- show/ read all -->
+            <!-- show/ Read All -->
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">
+              <a
+                onclick="getAllEmployee()"
+                class="nav-link active"
+                aria-current="page"
+                href="#"
+              >
                 <i class="fa-solid fa-house-user"></i>
                 Show All
               </a>
             </li>
-            <!-- department dropdown -->
+            <!-- department Dropdown -->
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -89,32 +94,16 @@
                 <i class="fa-solid fa-building"></i>
                 Departments
               </a>
-              <ul
-                class="dropdown-menu"
-                id="dropdown-menu-department"
-                aria-labelledby="navbarDropdown"
-              >
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <!-- add -->
                 <li>
                   <a
-                    class="dropdown-item"
+                    class="dropdown-item add-department"
                     href="#"
                     data-bs-toggle="modal"
                     data-bs-target="#addDepartmentModal"
                   >
                     <i class="fa-solid fa-plus"></i>
-                    Department
-                  </a>
-                </li>
-                <!-- edit -->
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editDepartmentModal"
-                  >
-                    <i class="fa-solid fa-pen-to-square"></i>
                     Department
                   </a>
                 </li>
@@ -125,19 +114,18 @@
                     href="#"
                     data-bs-toggle="modal"
                     data-bs-target="#deleteDepartmentModal"
+                    onclick="getDepartments()"
                   >
-                    <i
-                      class="fa-solid fa-trash"
-                      onclick="showDeleteConfirmationModalDepartment()"
-                    ></i>
+                    <i class="fa-solid fa-trash"></i>
                     Department
                   </a>
                 </li>
                 <li><hr class="dropdown-divider" /></li>
+                <ul id="dropdown-menu-department"></ul>
               </ul>
             </li>
 
-            <!-- Add Department Static Modal -->
+            <!-- add Department Static Modal -->
             <div
               class="modal fade"
               id="addDepartmentModal"
@@ -151,17 +139,17 @@
                   <div class="modal-header">
                     <h5 class="modal-title" id="addDepartmentModalLabel">
                       <i class="fa-solid fa-building"></i>
-                      Add Department
+                      Department Details
                     </h5>
                   </div>
                   <div class="modal-body">
                     <form>
                       <div class="form-group">
-                        <label for="NewDepartmentName"></label>
+                        <label for="new-department"></label>
                         <input
                           type="text"
                           class="form-control"
-                          id="NewDepartment"
+                          id="new-department"
                           placeholder="New Department"
                         />
 
@@ -185,14 +173,65 @@
                     >
                       Cancel
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="">
+                    <button
+                      id="save-department"
+                      type="button"
+                      class="btn btn-primary"
+                      onclick="createDepartment()"
+                    >
                       Save
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- location dropdown -->
+
+            <!-- delete Department Modal -->
+            <div
+              class="modal fade"
+              id="deleteDepartmentModal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+              data-bs-backdrop="static"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                      Delete Departments
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-check delete-departments"></div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onclick="deleteDepartment()"
+                      type="button"
+                      class="btn btn-primary"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- location Dropdown -->
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
@@ -205,15 +244,11 @@
                 <i class="fa-solid fa-globe"></i>
                 Locations
               </a>
-              <ul
-                class="dropdown-menu"
-                id="dropdown-menu-location"
-                aria-labelledby="navbarDropdown"
-              >
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <!-- add -->
                 <li>
                   <a
-                    class="dropdown-item"
+                    class="dropdown-item add-location"
                     href="#"
                     data-bs-toggle="modal"
                     data-bs-target="#addLocationModal"
@@ -222,30 +257,23 @@
                     Location
                   </a>
                 </li>
-                <!-- edit -->
-                <li>
-                  <a class="dropdown-item" data-bs-target="#editLocationModal">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                    Location
-                  </a>
-                </li>
                 <!-- delete -->
                 <li>
                   <a
                     class="dropdown-item"
+                    href="#"
+                    data-bs-toggle="modal"
                     data-bs-target="#deleteLocationModal"
                   >
-                    <i
-                      class="fa-solid fa-trash"
-                      onclick="showDeleteConfirmationModaLocation()"
-                    ></i>
+                    <i class="fa-solid fa-trash"></i>
                     Location
                   </a>
                 </li>
                 <li><hr class="dropdown-divider" /></li>
+                <ul id="dropdown-menu-location"></ul>
               </ul>
             </li>
-            <!-- add location static modal -->
+            <!-- add Location Static Modal -->
             <div
               class="modal fade"
               id="addLocationModal"
@@ -259,7 +287,7 @@
                   <div class="modal-header">
                     <h5 class="modal-title" id="addLocationModalLabel">
                       <i class="fa-solid fa-globe"></i>
-                      Add Location
+                      Location Details
                     </h5>
                   </div>
                   <div class="modal-body">
@@ -285,6 +313,7 @@
                       Cancel
                     </button>
                     <button
+                      id="save-location"
                       type="button"
                       onclick="createLocation()"
                       class="btn btn-primary"
@@ -296,10 +325,55 @@
               </div>
             </div>
 
-            <!-- add employee -->
+            <!-- delete Location Modal -->
+            <div
+              class="modal fade"
+              id="deleteLocationModal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+              data-bs-backdrop="static"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                      Delete Locations
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-check delete-locations"></div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onclick="deleteLocation()"
+                      type="button"
+                      class="btn btn-primary"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- add Employee -->
             <li class="nav-item">
               <a
-                class="nav-link"
+                class="nav-link add-employee"
                 href="#addEmployeeModal"
                 data-bs-toggle="modal"
               >
@@ -308,7 +382,7 @@
               </a>
             </li>
 
-            <!-- static modal -->
+            <!-- static Modal -->
             <div
               class="modal fade"
               id="addEmployeeModal"
@@ -396,6 +470,7 @@
                       Cancel
                     </button>
                     <button
+                      id="save-employee"
                       type="button"
                       onclick="createEmployee()"
                       class="btn btn-primary"
@@ -407,8 +482,9 @@
               </div>
             </div>
           </ul>
-          <form class="d-flex">
+          <form class="d-flex" onsubmit="filterByName(event)">
             <input
+              id="keyword"
               class="form-control me-2"
               type="search"
               placeholder="Search by name"
@@ -422,17 +498,15 @@
       </div>
     </nav>
 
-    <!-- employee card  -->
+    <!-- employee Card  -->
     <div class="container">
       <div
         id="employeeContainer"
         class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5"
       >
-        <!-- Employee Card Content -->
+        <!-- employee Card Content -->
       </div>
     </div>
-
-    <!-- Search Filter -->
 
     <!-- Plugins js -->
     <!-- jQuery -->
@@ -442,6 +516,7 @@
     <script src="./src/bootstrap.bundle.min.js"></script>
 
     <!-- My Code -->
+    <script src="./src/validation.js"></script>
     <script src="./src/app.js"></script>
   </body>
 </html>

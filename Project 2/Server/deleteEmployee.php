@@ -1,18 +1,15 @@
 <?php
 	$executionStartTime = microtime(true);
-
 	include("config.php");
-
 	header('Content-Type: application/json; charset=UTF-8');
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = 'DELETE FROM personnel WHERE id = ' . $_POST["ID"] . '';
-	
-    $result = $conn->query($query);
-	
-	if (false === $result) {
+	$query = $conn->prepare("DELETE FROM personnel WHERE id = ? ");
+	$query->bind_param("i", $_REQUEST['id']);
+	$query->execute();
+	if (false === $query) {
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";

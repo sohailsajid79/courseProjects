@@ -4,7 +4,7 @@
 	// http://localhost/companydirectory/libs/php/insertDepartment.php?name=New%20Department&locationID=<id>
 
 	include("config.php");
-
+	$executionStartTime = microtime(true);
 	header('Content-Type: application/json; charset=UTF-8');
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
@@ -12,7 +12,7 @@
 
 	$query = $conn->prepare('INSERT INTO location (name) VALUES(?)');
 
-	$query->bind_param("s", $_REQUEST['newLocation']);
+	$query->bind_param("s", $_REQUEST['location']);
 
 	$query->execute();
 	

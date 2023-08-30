@@ -1,24 +1,16 @@
 <?php
 
 	// example use from browser
-	// http://localhost/companydirectory/libs/php/getDepartmentByID.php?id=<id>
-
-	// remove next two lines for production	
-
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
+	// http://localhost/companydirectory/libs/php/getAll.php
 
 	$executionStartTime = microtime(true);
-
 	include("config.php");
+	header('Content-Type: application/json; charset=UTF-8');
+	
 
-	header('Content-Type: application/json; charset=UTF-8');	
-
-	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
-
-	$query = $conn->prepare('SELECT d.id, d.name, d.locationID as locationId, l.name as location FROM department as d INNER JOIN location as l ON d.locationID = l.id WHERE d.id = ?');
-	$query->bind_param("i", $_REQUEST['id']);
+	// SQL does not accept parameters and so is not prepared
+	$query = $conn->prepare("SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, d.id as departmentId, d.name as department, l.id as locationId, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) WHERE p.id = ? ");
+    $query->bind_param("i", $_REQUEST['id']);
 
 	$query->execute();
 	
@@ -45,4 +37,5 @@
 	mysqli_close($conn);
 
 	echo json_encode($output); 
+
 ?>

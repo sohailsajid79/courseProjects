@@ -1,21 +1,21 @@
 <?php
-
 	// example use from browser
 	// use insertDepartment.php first to create new dummy record and then specify it's id in the command below
 	// http://localhost/companydirectory/libs/php/deleteDepartmentByID.php?id=<id>
 
 	$executionStartTime = microtime(true);
-
 	include("config.php");
-
 	header('Content-Type: application/json; charset=UTF-8');
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
-	
-	$query->bind_param("i", $_REQUEST['id']);
+	$placeholders = implode(',', array_fill(0, count($_REQUEST['departments']), '?'));
+
+	$query = $conn->prepare("DELETE FROM department WHERE id IN ($placeholders)");
+
+	$types = str_repeat('i', count($_REQUEST['departments']));
+	$query->bind_param($types, ...$_REQUEST['departments']);
 
 	$query->execute();
 	
