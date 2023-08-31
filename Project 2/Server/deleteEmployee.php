@@ -1,6 +1,8 @@
 <?php
 	$executionStartTime = microtime(true);
+
 	include("config.php");
+
 	header('Content-Type: application/json; charset=UTF-8');
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.

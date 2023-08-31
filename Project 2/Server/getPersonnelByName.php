@@ -18,9 +18,9 @@
 	// first query - SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare("SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) WHERE p.firstName = ? OR p.lastName = ? ORDER BY p.firstName ");
-
-	$query->bind_param("ss", $_REQUEST['keyword'],  $_REQUEST['keyword']);
+	$query = $conn->prepare("SELECT p.id, p.firstName, p.lastName, p.jobTitle, p.email, d.name as department, l.name as location FROM personnel as p LEFT JOIN department as d ON d.id = p.departmentID LEFT JOIN location as l ON d.locationID = l.id WHERE CONCAT(p.firstName, ' ', p.lastName) LIKE ? ORDER BY p.firstName;");
+	$keyword = '%' . $_REQUEST['keyword'] . '%';
+	$query->bind_param("s",  $keyword);
 
 	$query->execute();
 	

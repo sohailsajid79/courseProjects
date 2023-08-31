@@ -1,4 +1,4 @@
-// preloader
+//preloader
 $(window).on("load", function () {
   if ($("#preloader").length) {
     $("#preloader")
@@ -10,11 +10,11 @@ $(window).on("load", function () {
 });
 
 $(document).ready(function () {
-  getAllEmployees();
+  getAllEmployee();
   getDepartments();
   getLocations();
 
-  // reset Add Employee Form
+  // reset add employee form
   $(".add-employee").click(function () {
     $("#firstName").val("");
     $("#lastName").val("");
@@ -25,8 +25,8 @@ $(document).ready(function () {
   });
 });
 
-// get All Employees From DB And Append to Directory
-function getAllEmployees() {
+// get all employees
+function getAllEmployee() {
   $.ajax({
     url: "Server/getAll.php",
     method: "GET",
@@ -34,7 +34,7 @@ function getAllEmployees() {
       if (response.status.code == 200 && response.data.length > 0) {
         displayEmlpoyees(response.data);
       } else {
-        $("#employeeContainer").html("<h1>Employees not found</h1>");
+        $("#employeeContainer").html("<h1>Employees not found!</h1>");
       }
     },
     error: function () {
@@ -43,7 +43,7 @@ function getAllEmployees() {
   });
 }
 
-// display Employees Card
+//display employees
 function displayEmlpoyees(employees) {
   $("#employeeContainer").html("");
   employees.forEach((employee) => {
@@ -80,7 +80,7 @@ function displayEmlpoyees(employees) {
   });
 }
 
-// add New Employee Card
+// add new employee
 function createEmployee() {
   const firstName = $.trim($("#firstName").val());
   const lastName = $.trim($("#lastName").val());
@@ -119,13 +119,13 @@ function createEmployee() {
             showConfirmButton: false,
             timer: 2500,
           });
-          // clear Form Inputs
+          // Clear form inputs
           $("#firstName").val("");
           $("#lastName").val("");
           $("#jobTitle").val("");
           $("#email").val("");
-          $("#department").val(""); // reset Department Selection
-          $("#Employeelocation").val(""); // reset Location Selection
+          $("#department").val(""); // Reset department selection
+          $("#Employeelocation").val(""); // Reset location selection
         }
       },
       error: function (error) {
@@ -141,7 +141,7 @@ function createEmployee() {
   }
 }
 
-// edit Existing Employee
+//edit existing employee
 function editEmployee(id) {
   $.ajax({
     url: "Server/getEmployeeByID.php",
@@ -166,12 +166,12 @@ function editEmployee(id) {
       }
     },
     error: function (error) {
-      console.log(error.responseText);
+      console.log(error);
     },
   });
 }
 
-// update Employee Card
+//update employee
 function updateEmployee(employeeId) {
   const data = {
     id: employeeId,
@@ -189,11 +189,11 @@ function updateEmployee(employeeId) {
     success: function (response) {
       if (response.status.code == 200) {
         $("#addEmployeeModal").modal("hide");
-        getAllEmployees();
+        getAllEmployee();
         swal.fire({
           title: "Updated!",
           icon: "success",
-          text: "Employee Has Been Update",
+          text: "Employee has been updated!",
           timer: 2000,
           showConfirmButton: false,
         });
@@ -201,7 +201,7 @@ function updateEmployee(employeeId) {
         swal.fire({
           title: "Failed!",
           icon: "error",
-          text: "Failed To Update Employee",
+          text: "Failed to updated employee!",
           timer: 2000,
           showConfirmButton: false,
         });
@@ -211,7 +211,7 @@ function updateEmployee(employeeId) {
       swal.fire({
         title: "Failed!",
         icon: "error",
-        text: "Something Went Wrong",
+        text: "Something went wrong!",
         timer: 3000,
         showConfirmButton: false,
       });
@@ -219,7 +219,7 @@ function updateEmployee(employeeId) {
   });
 }
 
-// delete Employee Card
+// delete employee
 function deleteEmployee(employeeId) {
   showDeleteConfirmationModal(function () {
     $.ajax({
@@ -230,25 +230,25 @@ function deleteEmployee(employeeId) {
       },
       success: function (response) {
         if (response.status.code == 200) {
-          swal.fire("Deleted", "Employee Has Been Deleted", "success");
+          swal.fire("Deleted", "Employee has been deleted!", "success");
           $("#employeeContainer").html("");
-          getAllEmployees();
+          getAllEmployee();
         } else {
-          swal.fire("Failed!", "Failed To Delete The Employee.", "error");
+          swal.fire("Failed!", "Failed to delete the employee.", "error");
         }
       },
       error: function (error) {
         Swal.fire({
           icon: "error",
           title: "Failed!",
-          text: "Something Went Wrong",
+          text: "Something went wrong!",
         });
       },
     });
   });
 }
 
-// get All Departments From DB
+// get all departments from db
 function getDepartments() {
   $.ajax({
     url: "Server/getAllDepartments.php",
@@ -268,6 +268,9 @@ function setDepartments(departments) {
   $("#dropdown-menu-department").html("");
   $(".delete-departments").html("");
   $("#department").html("");
+  $("#department").append(`
+    <option value="" disabled selected>Select department</option>
+  `);
   departments.forEach((department) => {
     $("#dropdown-menu-department").append(`
       <li class="d-flex align-content-center pe-3">
@@ -297,7 +300,7 @@ function setDepartments(departments) {
   });
 }
 
-// add New department
+//add new department
 function createDepartment() {
   const department = $("#new-department").val();
   const location = $("#deptLocationID").val();
@@ -318,7 +321,7 @@ function createDepartment() {
           swal.fire({
             title: "Created!",
             icon: "success",
-            text: "Department Has Been Created",
+            text: "Department has been created!",
             timer: 2000,
             showConfirmButton: false,
           });
@@ -331,14 +334,13 @@ function createDepartment() {
   }
 }
 
-// edit Department
+//edit department
 function editDepartment(id) {
   $.ajax({
     url: "Server/getDepartmentByID.php",
     method: "GET",
     data: { id },
     success: function (response) {
-      console.log(response);
       const data = response.data;
       if (response.status.code == 200 && data.hasOwnProperty("id")) {
         $("#new-department").val(data.name);
@@ -352,12 +354,11 @@ function editDepartment(id) {
       }
     },
     error: function (error) {
-      console.log(error.responseText);
+      console.log(error);
     },
   });
 }
 
-// update Department
 function updateDepartment(departmentId) {
   const department = $("#new-department").val();
   const location = $("#deptLocationID").val();
@@ -378,7 +379,7 @@ function updateDepartment(departmentId) {
           swal.fire({
             title: "Updated!",
             icon: "success",
-            text: "Department Has Been Updated",
+            text: "Department has been updated!",
             timer: 2000,
             showConfirmButton: false,
           });
@@ -386,7 +387,7 @@ function updateDepartment(departmentId) {
           swal.fire({
             title: "Failed!",
             icon: "error",
-            text: "Failed To Update Department",
+            text: "Failed to updated department!",
             timer: 2000,
             showConfirmButton: false,
           });
@@ -396,7 +397,7 @@ function updateDepartment(departmentId) {
         swal.fire({
           title: "Failed!",
           icon: "error",
-          text: "Something Went Wrong!",
+          text: "Something went wrong!",
           timer: 3000,
           showConfirmButton: false,
         });
@@ -405,9 +406,9 @@ function updateDepartment(departmentId) {
   }
 }
 
-// delete Department
+// delete department
 function deleteDepartment() {
-  let selectedDepartments = [];
+  var selectedDepartments = [];
   $(".department-checkbox:checked").each(function (index, checkbox) {
     var value = $(checkbox).val();
     selectedDepartments.push(value);
@@ -422,29 +423,35 @@ function deleteDepartment() {
         },
         success: function (response) {
           if (response.status.code == 200) {
-            getAllEmployees();
+            getAllEmployee();
             getDepartments();
             $("#deleteDepartmentModal").modal("hide");
             Swal.fire(
               "Success",
-              "Selected Department (s) Are Deleted",
+              "Selected departments are deleted!",
               "success"
+            );
+          } else if (response.status.code == 409) {
+            $("#deleteDepartmentModal").modal("hide");
+            Swal.fire(
+              "Warning",
+              "You can't delete location it's accociated with some department!",
+              "warning"
             );
           }
         },
         error: function (error) {
-          console.log(error.responseText);
+          console.log(error);
         },
       });
     });
   } else {
-    Swal.fire("Select Department First", "warn");
+    Swal.fire("Select department first", "warn");
   }
 }
 
-// affiliate Department With locationID Inside 'Add Employee Card Form'
+// affiliate Department with locationID Inside 'Add Employee Card Form'
 async function departmentOnChange() {
-  console.log("change");
   const deptId = $("#department").val();
   const res = await fetch("Server/getAllDepartments.php");
   const result = await res.json();
@@ -456,7 +463,7 @@ async function departmentOnChange() {
   $("#Employeelocation").append(option);
 }
 
-// get All Locations From DB
+// get all locations from db
 function getLocations() {
   $.ajax({
     url: "Server/getAllLocation.php",
@@ -506,7 +513,7 @@ function setLocations(locations) {
   });
 }
 
-// add New Location
+// add new location
 function createLocation() {
   const location = $("#addLocation").val();
   if (location) {
@@ -529,7 +536,7 @@ function createLocation() {
         }
       },
       error: function (error) {
-        console.log(error.responseText);
+        console.log(error);
       },
     });
   } else {
@@ -537,7 +544,7 @@ function createLocation() {
   }
 }
 
-// edit Location
+//edit location
 function editLocation(id) {
   $.ajax({
     url: "Server/getLocationByID.php",
@@ -552,12 +559,11 @@ function editLocation(id) {
       }
     },
     error: function (error) {
-      console.log(error.responseText);
+      console.log(error);
     },
   });
 }
 
-// update Location
 function updateLocation(locationId) {
   const location = $("#addLocation").val();
   if (location !== "") {
@@ -576,7 +582,7 @@ function updateLocation(locationId) {
           swal.fire({
             title: "Updated!",
             icon: "success",
-            text: "Location Has Been Updated",
+            text: "Location has been updated!",
             timer: 2000,
             showConfirmButton: false,
           });
@@ -584,7 +590,7 @@ function updateLocation(locationId) {
           swal.fire({
             title: "Failed!",
             icon: "error",
-            text: "Failed To Update Location",
+            text: "Failed to updated location!",
             timer: 2000,
             showConfirmButton: false,
           });
@@ -594,7 +600,7 @@ function updateLocation(locationId) {
         swal.fire({
           title: "Failed!",
           icon: "error",
-          text: "Something Went Wrong!",
+          text: "Something went wrong!",
           timer: 3000,
           showConfirmButton: false,
         });
@@ -605,14 +611,14 @@ function updateLocation(locationId) {
   }
 }
 
-// delete Location
+//delete location
 function deleteLocation() {
   var selectedLocations = [];
   $(".location-checkbox:checked").each(function (index, checkbox) {
     var value = $(checkbox).val();
     selectedLocations.push(value);
   });
-  console.log(selectedLocations);
+
   if (selectedLocations.length > 0) {
     showDeleteConfirmationModal(function () {
       $.ajax({
@@ -623,28 +629,30 @@ function deleteLocation() {
         },
         success: function (response) {
           if (response.status.code == 200) {
-            getAllEmployees();
+            getAllEmployee();
             getDepartments();
             getLocations();
             $("#deleteLocationModal").modal("hide");
+            Swal.fire("Success", "Selected locations are deleted!", "success");
+          } else if (response.status.code == 409) {
+            $("#deleteLocationModal").modal("hide");
             Swal.fire(
-              "Success",
-              "Selected Location (s) Are Deleted",
-              "success"
+              "Warning",
+              "You can't delete location it's accociated with some department!",
+              "warning"
             );
           }
         },
         error: function (error) {
-          console.log(error.responseText);
+          console.log(error);
         },
       });
     });
   } else {
-    Swal.fire("Select Department First", "warn");
+    Swal.fire("Select department first", "warn");
   }
 }
 
-// delete Confirmation Modal
 function showDeleteConfirmationModal(callbak) {
   const confirmationModal = Swal.mixin({
     customClass: {
@@ -657,7 +665,7 @@ function showDeleteConfirmationModal(callbak) {
   confirmationModal
     .fire({
       title: "Are you sure?",
-      text: "You Won't Be Able To Revert This Change",
+      text: "You won't be able to revert this change",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes",
@@ -671,7 +679,7 @@ function showDeleteConfirmationModal(callbak) {
     });
 }
 
-// filter Employee Department
+// filter employee department
 function filterByDepartment(id) {
   $.ajax({
     url: "Server/filterByDepartment.php",
@@ -681,7 +689,7 @@ function filterByDepartment(id) {
       if (response.status.code == 200 && response.data.length > 0) {
         displayEmlpoyees(response.data);
       } else {
-        $("#employeeContainer").html("<h1>Employees not found</h1>");
+        $("#employeeContainer").html("<h1>Employees not found!</h1>");
       }
     },
     error: function (error) {
@@ -689,7 +697,7 @@ function filterByDepartment(id) {
     },
   });
 }
-// filter Employee By Location
+// filter employee by location
 function filterByLocation(id) {
   $.ajax({
     url: "Server/filterByLocation.php",
@@ -699,7 +707,7 @@ function filterByLocation(id) {
       if (response.status.code == 200 && response.data.length > 0) {
         displayEmlpoyees(response.data);
       } else {
-        $("#employeeContainer").html("<h1>Employees not found</h1>");
+        $("#employeeContainer").html("<h1>Employees not found!</h1>");
       }
     },
     error: function (error) {
@@ -708,7 +716,7 @@ function filterByLocation(id) {
   });
 }
 
-// search By FirstName and LastName
+// search by firstName and lastName
 function filterByName(event) {
   event.preventDefault();
   const keyword = $("#keyword").val();
@@ -720,16 +728,15 @@ function filterByName(event) {
       if (response.status.code == 200 && response.data.length > 0) {
         displayEmlpoyees(response.data);
       } else {
-        $("#employeeContainer").html("<h1>Not found</h1>");
+        $("#employeeContainer").html("<h1>Not found!</h1>");
       }
     },
     error: function (error) {
-      console.log(error.responseText);
+      console.log(error);
     },
   });
 }
 
-// onclick Event Handlers
 $(".add-employee").click(function () {
   $("#save-employee").attr("onclick", "createEmployee()");
 });

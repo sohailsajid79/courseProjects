@@ -23,6 +23,20 @@
   animation: animate-preloader 1s linear infinite;
 }
 
+.firstName,
+.lastName {
+  font-size: 1.5rem;
+}
+
+.department,
+.location {
+  font-size: 0.9rem;
+}
+
+.email {
+  font-size: 0.8rem;
+}
+
 @-webkit-keyframes animate-preloader {
   0% {
     -webkit-transform: rotate(0deg);
